@@ -19,7 +19,7 @@ import FoundationModels
     let restaurantsTool = SearchRestaurantsTool()
     let shoppingTool = SearchShoppingTool()
     
-    let roundTripFlightBudget: Double = 1000.0  // Total budget for the outbound + return flights
+    let flightBudget: Double = 800.0     // total budget for flights
     let hotelBudget: Double = 200.0      // per-night budget for hotels
     
     // Provide high‑level instructions to the language model. These
@@ -28,10 +28,10 @@ import FoundationModels
     // user input.
     let instructions = Instructions {
         "You are a travel planner. Your job is to create a trip plan for the user."
-        "Use the 'searchFlights' tool with a 'maxPrice' of \(roundTripFlightBudget) to find round‑trip flight options whose total cost (both directions combined) stays within the budget."
-        "Use 'searchHotels' with a 'maxPrice' of \(hotelBudget) to recommend hotels within budget."
-        "Use 'searchRestaurants' to recommend restaurants."
-        "Use 'searchShopping' to suggest shopping venues."
+        "Use 'searchFlights' tool with 'maxPrice' of \(flightBudget) to find flight options within budget."
+        "Use 'searchHotels' tool with 'maxPrice' of \(hotelBudget) to recommend hotels within budget."
+        "Use 'searchRestaurants' tool to recommend restaurants."
+        "Use 'searchShopping' tool to suggest shopping venues."
         "Return only results whose prices are within those budgets."
     }
     // "Return your results in a 'TripSuggestion' structure."
@@ -46,8 +46,8 @@ import FoundationModels
     // and trip duration as needed. The model will invoke the tools
     // automatically to fulfil the request.
     let prompt = Prompt {
-        "Plan a 3‑day round‑trip from Chicago (ORD) to Paris (CDG), departing on 2025‑05‑01 and returning on 2025‑05‑04."
-        "The total flight budget for both legs is \(roundTripFlightBudget) USD and the hotel budget is \(hotelBudget) USD per night."
+        "Plan a 3‑day trip from Chicago (ORD) to Paris (CDG) departing on 2025‑05‑01."
+        "The flight budget is \(flightBudget) USD and the hotel budget is \(hotelBudget) USD per night."
         "Provide flight options, hotel suggestions, restaurant recommendations and shopping activities."
         "Give the trip a fun title and description."
     }
@@ -59,7 +59,7 @@ import FoundationModels
     let suggestion = try await session.respond(
         to: prompt,
         generating: TripSuggestion.self,
-        options: GenerationOptions(sampling: .greedy)
+//        options: GenerationOptions(sampling: .greedy)
     )
     
     // At this point `suggestion` contains the structured trip plan. You can
