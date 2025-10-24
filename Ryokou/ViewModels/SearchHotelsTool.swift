@@ -23,6 +23,8 @@ public struct HotelResult: Codable {
     public var name: String
     public var minimumPrice: Double?
     public var maximumPrice: Double?
+    public var latitude: Double?   // hotel’s latitude
+    public var longitude: Double?  // hotel’s longitude
 }
 
 @Observable
@@ -95,11 +97,37 @@ public final class SearchHotelsTool: Tool {
                     continue
                 }
                 
-                // Create the hotel result
+                // Use /list with location_key to fetch geo coordinates
+                var listComps = URLComponents(string: "https://data.xotelo.com/api/list")!
+                listComps.queryItems = [
+                    URLQueryItem(name: "location_key", value: hotel.locationKey),
+                    URLQueryItem(name: "offset", value: "0"),
+                    URLQueryItem(name: "limit", value: "1")
+                ]
+                let (listData, _) = try await URLSession.shared.data(from: listComps.url!)
+                
+                struct ListResponse: Decodable {
+                    struct Result: Decodable {
+                        struct HotelItem: Decodable {
+                            struct Geo: Decodable { let latitude: Double; let longitude: Double }
+                            let key: String
+                            let geo: Geo
+                        }
+                        let list: [HotelItem]
+                    }
+                    let result: Result
+                }
+                
+                let listResp = try JSONDecoder().decode(ListResponse.self, from: listData)
+                let geo = listResp.result.list.first(where: { $0.key == hotel.hotelKey })?.geo
+                
+                // 4. Build the HotelResult including coordinates
                 results.append(HotelResult(
                     name: hotel.name,
-                    minimumPrice: minRate,
-                    maximumPrice: maxRate,
+                    minimumPrice: minRate ?? 0.0,
+                    maximumPrice: maxRate ?? 0.0,
+                    latitude: geo?.latitude,
+                    longitude: geo?.longitude
                 ))
             } catch {
                 // If rate retrieval fails, include the hotel without price data
