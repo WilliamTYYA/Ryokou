@@ -23,7 +23,7 @@ import FoundationModels
     
     let prompt = Prompt {
         "Plan a round‑trip from Chicago (ORD) to Paris (CDG), departing 2025‑12‑01 and returning 2025‑12‑04."
-        "The flight budget is \(flightBudget) USD and the hotel budget is \(hotelBudget) USD per night."
+        "The flight budget is \(flightBudget) USD and the hotel budget is \(hotelBudget) USD."
         "Provide flight and hotel options."
     }
     
