@@ -16,10 +16,10 @@ public struct TripSuggestion: Codable {
     public var flights: [FlightResult]
     @Guide(.count(3))
     public var hotels: [HotelResult]
-    @Guide(.count(3))
-    public var restaurants: [RestaurantResult]
-    @Guide(.count(3))
-    public var shoppings: [ShoppingResult]
+//    @Guide(.count(3))
+//    public var restaurants: [RestaurantResult]
+//    @Guide(.count(3))
+//    public var shoppings: [ShoppingResult]
 }
 
 // MARK: - Environment
