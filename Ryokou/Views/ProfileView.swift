@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct ProfileView: View {
+    let username: String
+    let onSignOut: () -> Void
+    
     @State private var isEditing: Bool = false
     
     @AppStorage("profile") private var profile: Profile = .sample
@@ -50,6 +53,12 @@ struct ProfileView: View {
                 }
                 .disabled(!isEditing)
                 .opacity(isEditing ? 1 : 0.75)
+                
+                VStack(spacing: 16) {
+                    Text("Hello, \(username)").font(.title2)
+                    Button("Sign out", action: onSignOut)
+                        .buttonStyle(.bordered)
+                }
             }
             .navigationTitle("Setup Profile")
             .toolbar {

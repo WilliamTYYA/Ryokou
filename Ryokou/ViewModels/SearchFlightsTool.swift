@@ -32,7 +32,7 @@ public struct FlightSearchArguments: Codable {
 }
 
 @Generable
-public struct FlightResult: Codable {
+public struct FlightResult: Codable, Equatable {
     /// e.g. "Delta"
     public var airline: String
     /// e.g. "DL 1234"

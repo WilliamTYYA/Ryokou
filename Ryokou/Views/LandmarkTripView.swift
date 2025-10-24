@@ -4,6 +4,8 @@ struct LandmarkTripView: View {
     let landmark: Landmark
     
     @State private var tripSuggestionGenerator: TripSuggestionGenerator?
+    @State private var tripSuggestionVM: TripSuggestionViewModel = .init()
+    // State(initialValue: TripSuggestionViewModel(landmark: landmark))
 
     @AppStorage("profile") private var profile: Profile = .sample
     @State private var requestedItinerary: Bool = false
@@ -21,12 +23,24 @@ struct LandmarkTripView: View {
                         .fontWeight(.bold)
                     
                     Text(landmark.description)
+                    
+                    DateRangeFields(departure: $departure,
+                                    returning: $returning,
+                                    earliest: Date(),
+                                    latest: Calendar.current.date(byAdding: .year, value: 1, to: Date())!,
+                                    minimumNights: 1)
+                        .padding(.top, 8)
                 }
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            } else if let itinerary = tripSuggestionGenerator?.tripSuggestion {
+            } else if let tripSuggestion = tripSuggestionGenerator?.tripSuggestion {
 //                ItineraryView(landmark: landmark, itinerary: itinerary)
 //                    .padding()
+//                NavigationLink(
+                TripSuggestionView(
+                    vm: tripSuggestionVM,
+                    suggestion: tripSuggestion
+                )
             }
             
         }
@@ -38,7 +52,8 @@ struct LandmarkTripView: View {
                                            landmark: landmark,
                                            departureDate: departure,
                                            returnDate: returning)
-                await tripSuggestionGenerator?.generateTripSuggestion(context: ctx)
+                await tripSuggestionGenerator?
+                    .generateTripSuggestion(context: ctx)
             }
         }
         .task {

@@ -19,7 +19,7 @@ public struct HotelSearchArguments: Codable {
 
 
 @Generable
-public struct HotelResult: Codable {
+public struct HotelResult: Codable, Equatable {
     public var name: String
     public var minimumPrice: Double?
     public var maximumPrice: Double?
@@ -36,6 +36,8 @@ public final class SearchHotelsTool: Tool {
     public typealias Arguments = HotelSearchArguments
     
     public func call(arguments: Arguments) async throws -> [HotelResult] {
+        print("SearchHotelsTool arguments: \(arguments)")
+        
         // Step 1: perform a search query to retrieve hotel keys and location keys
         // Example: https://data.xotelo.com/api/search?query=tokyo
         let searchURLString = "https://data.xotelo.com/api/search?query=\(arguments.query)"

@@ -27,7 +27,7 @@ struct RyokouApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: FavoritedTrip.self)
+//        .modelContainer(for: FavoritedTrip.self)
 //        WindowGroup {
 //            ContentView()
 //        }

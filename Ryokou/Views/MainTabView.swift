@@ -10,22 +10,27 @@ import SwiftUI
 /// The main tab view shown after the user has created their profile. It contains
 /// tabs for searching new trips, viewing saved trips and editing the profile.
 struct MainTabView: View {
+    let username: String
+    let onSignOut: () -> Void
+    
     var body: some View {
         TabView {
-            LandmarksHomeView()
-                .tabItem {
-                    Label("Map", systemImage: "map")
-                }
-            
-            Text("Saved Trips")
-                .tabItem {
-                    Label("Saved", systemImage: "bookmark")
-                }
-            
-            ProfileView()
-                .tabItem {
-                    Label("Profile", systemImage: "person.crop.circle")
-                }
+//            NavigationStack {
+                LandmarksHomeView()
+                    .tabItem {
+                        Label("Map", systemImage: "map")
+                    }
+                
+                Text("Saved Trips")
+                    .tabItem {
+                        Label("Saved", systemImage: "bookmark")
+                    }
+                
+                ProfileView(username: username, onSignOut: onSignOut)
+                    .tabItem {
+                        Label("Profile", systemImage: "person.crop.circle")
+                    }
+//            }
         }
     }
 }
