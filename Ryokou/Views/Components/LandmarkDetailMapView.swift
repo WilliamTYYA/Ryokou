@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct LandmarkDetailMapView: View {
-    let landmark: Landmark
+    let landmark: Destination
     var landmarkMapItem: MKMapItem?
 
     var body: some View {

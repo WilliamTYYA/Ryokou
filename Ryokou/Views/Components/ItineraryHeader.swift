@@ -8,7 +8,7 @@ A SwiftUI view displaying the itinerary header.
 import SwiftUI
 
 struct ItineraryHeader: View {
-    let destination: Landmark
+    let destination: Destination
     var body: some View {
         ZStack(alignment: .topLeading) {
             Image(destination.backgroundImageName)

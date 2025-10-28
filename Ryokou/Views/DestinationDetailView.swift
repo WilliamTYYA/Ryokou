@@ -2,7 +2,7 @@ import FoundationModels
 import SwiftUI
 
 struct DestinationDetailView: View {
-    let landmark: Landmark
+    let landmark: Destination
     
     private let model = SystemLanguageModel.default
 

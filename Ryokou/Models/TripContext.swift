@@ -25,7 +25,7 @@ extension TripContext {
         return f
     }()
     
-    static func from(profile: Profile, landmark: Landmark, departureDate: Date, returnDate: Date) -> TripContext {
+    static func from(profile: Profile, landmark: Destination, departureDate: Date, returnDate: Date) -> TripContext {
         TripContext(
             origin: profile.location.city,
             destination: landmark.name,

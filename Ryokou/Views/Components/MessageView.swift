@@ -9,10 +9,10 @@ import SwiftUI
 
 struct MessageView: View {
     let error: Error?
-    let landmark: Landmark
+    let landmark: Destination
     let message: String?
     
-    init(error: Error? = nil, landmark: Landmark, message: String? = nil) {
+    init(error: Error? = nil, landmark: Destination, message: String? = nil) {
         self.error = error
         self.landmark = landmark
         self.message = message

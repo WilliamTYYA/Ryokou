@@ -10,8 +10,8 @@ import SwiftUI
 struct DestinationListView: View {
     @State private var searchText = ""
     
-    private var filteredLandmarks: [Landmark] {
-        ModelData.landmarks.filter { lm in
+    private var filteredLandmarks: [Destination] {
+        ModelData.destinations.filter { lm in
             searchText.isEmpty || lm.name.localizedCaseInsensitiveContains(searchText)
         }
     }
@@ -64,7 +64,7 @@ struct DestinationListView: View {
 }
 
 struct DestinationListCardView: View {
-    let landmark: Landmark
+    let landmark: Destination
     
     var body: some View {
         

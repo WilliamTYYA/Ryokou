@@ -8,7 +8,7 @@ A structure for creating custom visual effects with SwiftUI.
 import SwiftUI
 
 struct HeaderStyle: ViewModifier {
-    let landmark: Landmark
+    let landmark: Destination
     
     func body(content: Content) -> some View {
         content
@@ -148,7 +148,7 @@ extension View {
         modifier(BlurredBackgroundModifier())
     }
     
-    func headerStyle(landmark: Landmark) -> some View {
+    func headerStyle(landmark: Destination) -> some View {
         modifier(HeaderStyle(landmark: landmark))
     }
 }

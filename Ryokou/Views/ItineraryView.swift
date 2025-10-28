@@ -10,7 +10,7 @@ import FoundationModels
 import MapKit
 
 struct ItineraryView: View {
-    let landmark: Landmark
+    let landmark: Destination
     let itinerary: Itinerary.PartiallyGenerated
     
     var body: some View {
@@ -53,7 +53,7 @@ struct ItineraryView: View {
 }
 
 private struct DayView: View {
-    let landmark: Landmark
+    let landmark: Destination
     let plan: DayPlan.PartiallyGenerated
     
     @State private var mapItem: MKMapItem?

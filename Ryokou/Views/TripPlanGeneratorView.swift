@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct TripPlanGeneratorView: View {
-    let landmark: Landmark
+    let landmark: Destination
     
     @State private var flightAndAccommodationSuggestionGenerator: FlightAndAccommodationSuggestionGenerator?
     @State private var flightAndAccommodationSuggestionViewModel: FlightAndAccommodationSuggestionViewModel = .init()
@@ -25,8 +25,6 @@ struct TripPlanGeneratorView: View {
                     
                     DateRangeFields(departure: $departure,
                                     returning: $returning,
-                                    earliest: Date(),
-                                    latest: Calendar.current.date(byAdding: .year, value: 1, to: Date())!,
                                     minimumNights: 1)
                         .padding(.top, 8)
                 }
@@ -59,4 +57,10 @@ struct TripPlanGeneratorView: View {
         .headerStyle(landmark: landmark)
     }
     
+}
+
+#Preview {
+    TripPlanGeneratorView(
+        landmark: ModelData.destinations.first!
+    )
 }

@@ -8,7 +8,7 @@
 import Foundation
 import MapKit
 
-struct Landmark: Hashable, Codable, Identifiable {
+struct Destination: Hashable, Codable, Identifiable {
     var id: String            // same as background image name
     var name: String
     var continent: String
@@ -35,8 +35,8 @@ struct Landmark: Hashable, Codable, Identifiable {
 // MARK: - Sample Data
 
 enum ModelData {
-    static let landmarks: [Landmark] = [
-        Landmark(
+    static let destinations: [Destination] = [
+        Destination(
             id: "Paris",
             name: "Paris",
             continent: "Europe",
@@ -45,7 +45,7 @@ enum ModelData {
             longitude: 2.3522,
             span: 0.2
         ),
-        Landmark(
+        Destination(
             id: "NewYork",
             name: "New York",
             continent: "North America",
@@ -54,7 +54,7 @@ enum ModelData {
             longitude: -74.0060,
             span: 0.22
         ),
-        Landmark(
+        Destination(
             id: "Tokyo",
             name: "Tokyo",
             continent: "Asia",
@@ -65,5 +65,5 @@ enum ModelData {
         )
     ]
     
-    static let landmarkNames: [String] = landmarks.map { $0.name }
+    static let destinationNames: [String] = destinations.map { $0.name }
 }

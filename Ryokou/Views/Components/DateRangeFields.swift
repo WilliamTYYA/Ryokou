@@ -20,29 +20,34 @@ struct DateRangeFields: View {
     @Binding var departure: Date
     @Binding var returning: Date
     
-    var earliest: Date = Date()                                   // min allowed departure
+    var earliestDeparture: Date = Date().startOfDayApp
     var latest: Date = Calendar.app.date(byAdding: .year, value: 1, to: Date())!
-    var minimumNights: Int = 0                                     // set to 1 if you require overnight
+    var minimumNights: Int = 0
     
-    private var minReturn: Date { departure.startOfDayApp.addingDays(minimumNights) }
+    private var earliestReturn: Date { departure.startOfDayApp.addingDays(minimumNights) }
+    
+    init(departure: Binding<Date>, returning: Binding<Date>, minimumNights: Int = 1) {
+        self._departure = departure
+        self._returning = returning
+        self.minimumNights = minimumNights
+    }
     
     var body: some View {
         HStack(spacing: 12) {
             DateField(
                 label: "Departure",
                 date: $departure,
-                range: earliest.startOfDayApp ... latest
+                range: earliestDeparture.startOfDayApp ... latest
             )
             DateField(
                 label: "Return",
                 date: $returning,
-                range: minReturn ... latest
+                range: earliestReturn ... latest
             )
         }
-        // Keep the invariant at all times
         .onChange(of: departure) { _, newValue in
-            let minEnd = newValue.startOfDayApp.addingDays(minimumNights)
-            if returning < minEnd { returning = minEnd }
+            let newDeparture = newValue.startOfDayApp.addingDays(minimumNights)
+            if returning < newDeparture { returning = newDeparture }
         }
         .onChange(of: returning) { _, newValue in
             if newValue < departure { departure = newValue }
@@ -53,7 +58,8 @@ struct DateRangeFields: View {
 struct DateField: View {
     let label: String
     @Binding var date: Date
-    var range: ClosedRange<Date>?
+    var range: ClosedRange<Date>
+    
     @State private var showing = false
     
     var body: some View {
@@ -70,10 +76,17 @@ struct DateField: View {
         }
         .buttonStyle(.plain)
         .popover(isPresented: $showing, arrowEdge: .bottom) {
-            DatePicker(label, selection: $date, in: range ?? Date.distantPast...Date.distantFuture, displayedComponents: .date)
+            DatePicker(label, selection: $date, in: range, displayedComponents: .date)
                 .datePickerStyle(.graphical)
                 .padding()
                 .presentationDetents([.medium])
         }
+        // Date.distantPast...Date.distantFuture
     }
+}
+
+#Preview {
+    @Previewable @State var dep: Date = Date().addingDays(-10)
+    @Previewable @State var ret: Date = Date().addingDays(3)
+    DateRangeFields(departure: $dep, returning: $ret)
 }
