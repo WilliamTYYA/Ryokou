@@ -9,7 +9,7 @@ import Observation
 
 @Observable
 @MainActor
-final class TripSuggestionViewModel {
+final class FlightAndAccommodationSuggestionViewModel {
 //    let landmark: Landmark
     var selectedFlight: FlightResult?
     var selectedHotel: HotelResult?

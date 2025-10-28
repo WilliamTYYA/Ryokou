@@ -1,7 +1,7 @@
 import FoundationModels
 import SwiftUI
 
-struct LandmarkDetailView: View {
+struct DestinationDetailView: View {
     let landmark: Landmark
     
     private let model = SystemLanguageModel.default
@@ -10,7 +10,7 @@ struct LandmarkDetailView: View {
         // MARK: - [CODE-ALONG] Chapter 1.4.3: Replace availability with model.availability
         switch model.availability {
         case .available:
-            LandmarkTripView(landmark: landmark)
+            TripPlanGeneratorView(landmark: landmark)
             
         case .unavailable:
             MessageView(

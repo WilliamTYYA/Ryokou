@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct TripSuggestionView: View {
-    let suggestion: TripSuggestion.PartiallyGenerated
-    private var vm: TripSuggestionViewModel
+struct FlightAndAccomodationSuggestionView: View {
+    let suggestion: FlightAndAccommodationSuggestion.PartiallyGenerated
+    private var viewModel: FlightAndAccommodationSuggestionViewModel
     
-    init(vm: TripSuggestionViewModel, suggestion: TripSuggestion.PartiallyGenerated) {
-        self.suggestion = suggestion
-        self.vm = vm
+    init(viewModel flightAndAccomodationSuggestionViewModel: FlightAndAccommodationSuggestionViewModel, suggestion flightAndAccomodationSuggestion: FlightAndAccommodationSuggestion.PartiallyGenerated) {
+        self.suggestion = flightAndAccomodationSuggestion
+        self.viewModel = flightAndAccomodationSuggestionViewModel
     }
     
     var body: some View {
@@ -16,8 +16,8 @@ struct TripSuggestionView: View {
                     ForEach(flights, id: \.flightNumber) { f in
                         if let airline = f.airline, let flightNumber = f.flightNumber, let departureTime = f.departureTime, let arrivalTime = f.arrivalTime, let price = f.price {
                             
-                            SelectRow(isSelected: vm.selectedFlight?.flightNumber == f.flightNumber) {
-                                vm.selectedFlight = FlightResult(
+                            SelectRow(isSelected: viewModel.selectedFlight?.flightNumber == f.flightNumber) {
+                                viewModel.selectedFlight = FlightResult(
                                     airline: airline,
                                     flightNumber: flightNumber,
                                     price: price,
@@ -49,8 +49,8 @@ struct TripSuggestionView: View {
                 if let hotels = suggestion.hotels {
                     ForEach(hotels) { h in
                         if let name = h.name, let minimumPrice = h.minimumPrice, let MaximumPrice = h.maximumPrice, let latitude = h.latitude, let longitude = h.longitude {
-                            SelectRow(isSelected: vm.selectedHotel?.name == h.name) {
-                                vm.selectedHotel = HotelResult(
+                            SelectRow(isSelected: viewModel.selectedHotel?.name == h.name) {
+                                viewModel.selectedHotel = HotelResult(
                                     name: name,
                                     minimumPrice: minimumPrice,
                                     maximumPrice: MaximumPrice,
@@ -81,7 +81,7 @@ struct TripSuggestionView: View {
                     Button("Confirm") {
                         
                     }
-                    .disabled(!vm.canConfirm)
+                    .disabled(!viewModel.canConfirm)
                 }
             }
         }

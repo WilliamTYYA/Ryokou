@@ -30,7 +30,7 @@ import FoundationModels
     // First model call – returns flight and hotel suggestions
     let selectionResponse = try await selectionSession.respond(
         to: prompt,
-        generating: TripSuggestion.self
+        generating: FlightAndAccommodationSuggestion.self
     )
     
     let inspectSession = selectionSession

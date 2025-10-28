@@ -13,7 +13,7 @@ struct GenerateButton: View {
     let closure: () async throws -> Void
 
     var body: some View {
-        VStack {
+//        VStack {
             Button {
                 showButton = false
                 Task { @MainActor in
@@ -36,7 +36,7 @@ struct GenerateButton: View {
                 showButton = true
             }
             .transition(.opacity)
-        }
-        .frame(maxWidth: .infinity, alignment: .bottom)
+//        }
+//        .frame(maxWidth: .infinity, alignment: .bottom)
     }
 }

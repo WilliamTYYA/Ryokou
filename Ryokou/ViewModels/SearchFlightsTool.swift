@@ -34,14 +34,13 @@ public struct FlightSearchArguments: Codable {
 @Generable
 public struct FlightResult: Codable, Equatable {
     /// e.g. "Delta"
-    public var airline: String
+    public var airline: String?
     /// e.g. "DL 1234"
-    public var flightNumber: String
+    public var flightNumber: String?
     public var price: Double
     public var departureTime: String
     public var arrivalTime: String
 }
-
 
 @Observable
 public final class SearchFlightsTool: Tool {
@@ -81,21 +80,33 @@ public final class SearchFlightsTool: Tool {
             struct FlightAPIResponse: Decodable {
                 struct Itinerary: Decodable {
                     let id: String
-                    let legIds: [String]?
-                    let pricingOptions: [PricingOption]?
+                    let legIds: [String]?                 // can be missing/empty
+                    let pricingOptions: [PricingOption]?  // can be missing/empty
                     
                     struct PricingOption: Decodable {
-                        struct Price: Decodable {
-                            let amount: Double
-                        }
-                        let price: Price
+                        struct Price: Decodable { let amount: Double? } // some responses omit amount
+                        let price: Price?
                     }
                 }
                 
                 struct Leg: Decodable {
                     let id: String
-                    let departure: String
-                    let arrival: String
+                    let departure: String?                // some endpoints may omit or null these
+                    let arrival: String?
+                    let segments: [Segment]?              // not always present
+                    let carriers: Carriers?               // not always present
+                    
+                    struct Segment: Decodable {
+                        // different payloads expose either a code or a name + number
+                        let marketingCarrier: String?         // e.g. "JL"
+                        let marketingCarrierName: String?     // e.g. "Japan Airlines"
+                        let flightNumber: String?             // e.g. "123"
+                        let number: String?                   // sometimes named "number"
+                    }
+                    struct Carriers: Decodable {
+                        let marketing: [String]?          // e.g. ["JL"]
+                        let marketingNames: [String]?     // e.g. ["Japan Airlines"]
+                    }
                 }
                 
                 let itineraries: [Itinerary]?
@@ -106,39 +117,56 @@ public final class SearchFlightsTool: Tool {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             let apiResponse = try decoder.decode(FlightAPIResponse.self, from: data)
             
-            guard let itineraries = apiResponse.itineraries, let legs = apiResponse.legs else {
-                // If the API didn’t return flight data, just return an empty array
+            // If the API didn’t return flight data, just return an empty array
+            guard let itineraries = apiResponse.itineraries,
+                  let legs = apiResponse.legs,
+                  !itineraries.isEmpty, !legs.isEmpty else {
                 return []
             }
             
             // Build a lookup of legs by ID for quick access
             let legLookup = Dictionary(uniqueKeysWithValues: legs.map { ($0.id, $0) })
+            
             // Map itineraries to FlightResult
             var results: [FlightResult] = []
             
             for itinerary in itineraries {
-                guard let pricingOption = itinerary.pricingOptions?.first else { continue }
-                let price = pricingOption.price.amount
+                // price may be missing — skip if we can't read it or if it busts the budget
+                guard let price = itinerary.pricingOptions?.first?.price?.amount,
+                      price <= arguments.budget else { continue }
                 
-                if price > arguments.budget {
-                    continue
-                }
+                guard let legId = itinerary.legIds?.first,
+                      let leg = legLookup[legId] else { continue }
                 
-                var departureTime = ""
-                var arrivalTime = ""
-                if let legId = itinerary.legIds?.first, let leg = legLookup[legId] {
-                    departureTime = leg.departure
-                    arrivalTime = leg.arrival
+                let departureTime = leg.departure ?? ""
+                let arrivalTime   = leg.arrival   ?? ""
+                
+                // Try to extract airline & number from the first segment, with fallbacks
+                var airline: String?
+                var flightNumber: String?
+                
+                if let seg = leg.segments?.first {
+                    airline = seg.marketingCarrierName
+                    ?? seg.marketingCarrier
+                    ?? leg.carriers?.marketingNames?.first
+                    ?? leg.carriers?.marketing?.first
+                    
+                    flightNumber = seg.flightNumber ?? seg.number
+                } else {
+                    // no segments — try carrier-level info only
+                    airline = leg.carriers?.marketingNames?.first
+                    ?? leg.carriers?.marketing?.first
                 }
                 
                 results.append(FlightResult(
-                    airline: "",
-                    flightNumber: "",
+                    airline: airline,                 // may be nil (fine)
+                    flightNumber: flightNumber,       // may be nil (fine)
                     price: price,
                     departureTime: departureTime,
                     arrivalTime: arrivalTime
                 ))
             }
+            
             return results
         } catch {
             // Hard‑coded fallback options if the API call fails (e.g. due to no credits)
@@ -148,9 +176,7 @@ public final class SearchFlightsTool: Tool {
             func makeTimestamp(_ date: String, _ time: String) -> String {
                 return "\(date)T\(time):00Z"
             }
-            
-            let returnDate = arguments.returnDate
-            
+                        
             // Option 1
             fallbackResults.append(FlightResult(
                 airline: "Sample Air",

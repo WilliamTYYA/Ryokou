@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LandmarksHomeView: View {
+struct DestinationListView: View {
     @State private var searchText = ""
     
     private var filteredLandmarks: [Landmark] {
@@ -31,15 +31,15 @@ struct LandmarksHomeView: View {
                             .foregroundStyle(.secondary)
                         Text("No matches")
                             .font(.headline)
-                        Text("Try another city or continent.")
+                        Text("Try another city.")
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, minHeight: 240)
                 } else {
                     LazyVStack(alignment: .center, spacing: 20) {
                         ForEach(filteredLandmarks) { landmark in
-                            NavigationLink(destination: LandmarkDetailView(landmark: landmark)) {
-                                LandmarkListItemView(landmark: landmark)
+                            NavigationLink(destination: DestinationDetailView(landmark: landmark)) {
+                                DestinationListCardView(landmark: landmark)
                                     .frame(height: 200)
                             }
                             .buttonStyle(.plain)
@@ -48,14 +48,10 @@ struct LandmarksHomeView: View {
                     .padding(.horizontal)
                 }
             }
-            .navigationTitle("Explore")
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
         }
-        .searchable(
-            text: $searchText,
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "Search Cities"
-        )
+        .searchable(text: $searchText, prompt: "Search Cities")
         .disableAutocorrection(true)
         .textInputAutocapitalization(.never)
 //        .searchSuggestions {
@@ -67,7 +63,7 @@ struct LandmarksHomeView: View {
     }
 }
 
-struct LandmarkListItemView: View {
+struct DestinationListCardView: View {
     let landmark: Landmark
     
     var body: some View {
