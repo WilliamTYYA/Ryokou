@@ -19,9 +19,9 @@ public struct ShoppingResult: Codable {
 }
 
 public struct SearchShoppingTool: Tool {
-    public var name: String = "searchShopping"
+    public let name: String = "searchShopping"
     
-    public var description: String = "Finds nearby shopping malls around a coordinate using the Geoapify Places API."
+    public let description: String = "Finds nearby shopping malls around a coordinate using the Geoapify Places API."
     
     public typealias Arguments = ShoppingSearchArguments
     

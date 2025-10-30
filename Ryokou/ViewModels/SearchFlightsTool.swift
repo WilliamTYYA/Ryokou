@@ -44,8 +44,8 @@ public struct FlightResult: Codable, Equatable {
 
 @Observable
 public final class SearchFlightsTool: Tool {
-    public var name: String = "searchFlights"
-    public var description: String = "Searches for flights between an origin and destination using the FlightAPI.io Flight Price API."
+    public let name: String = "searchFlights"
+    public let description: String = "Searches for flights between an origin and destination using the FlightAPI.io Flight Price API."
     
     public typealias Arguments = FlightSearchArguments
     
