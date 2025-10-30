@@ -68,10 +68,16 @@ struct DateField: View {
         } label: {
             HStack {
                 Text(label).foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .layoutPriority(0)
                 Spacer()
                 Text(date.formatted(date: .abbreviated, time: .omitted))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+                    .layoutPriority(1)
             }
             .padding(12)
+            .frame(height: 48)
             .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10))
         }
         .buttonStyle(.plain)
