@@ -1,5 +1,7 @@
 import FoundationModels
 import SwiftUI
+import CoreLocation
+import MapKit
 
 @Generable
 public struct HotelSearchArguments: Codable {
@@ -25,6 +27,21 @@ public struct HotelResult: Codable, Equatable {
     public var maximumPrice: Double?
     public var latitude: Double?   // hotel’s latitude
     public var longitude: Double?  // hotel’s longitude
+}
+
+extension HotelResult.PartiallyGenerated {
+    public var locationCoordinate: CLLocationCoordinate2D? {
+        guard let lat = latitude, let lon = longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
+    
+    public var regionCoordinate: MKCoordinateRegion? {
+        guard let c = locationCoordinate else { return nil }
+        return MKCoordinateRegion(
+            center: c,
+            span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        )
+    }
 }
 
 @Observable

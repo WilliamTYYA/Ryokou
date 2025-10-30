@@ -9,15 +9,16 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
-    let coordinateRegion: MKCoordinateRegion
-    var coordinate: CLLocationCoordinate2D
+    var annotation: String
+    var regionCoordinate: MKCoordinateRegion
+    var locationCoordinate: CLLocationCoordinate2D
 
     var body: some View {
-        Map(initialPosition: .region(coordinateRegion), interactionModes: []) {
-            Annotation("Coordinate", coordinate: landmarkMapItem.location.coordinate) {
+        Map(initialPosition: .region(regionCoordinate), interactionModes: []) {
+            Annotation(annotation, coordinate: locationCoordinate) {
                 Image(systemName: "mappin.circle.fill")
                     .font(.title)
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.accentColor)
             }
         }
         .disabled(true)

@@ -85,15 +85,27 @@ struct FlightAndAccomodationSuggestionView: View {
                                         longitude: h.longitude
                                     )
                                 } content: {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(name)
-                                            .contentTransition(.opacity)
-                                            .font(.headline)
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        HStack {
+                                            Text(name)
+                                                .contentTransition(.opacity)
+                                                .font(.headline)
+                                            
+                                            Spacer()
+                                            
+                                            Text(String(format: "$%.0f–$%.0f", min, max))
+                                                .contentTransition(.opacity)
+                                                .font(.subheadline)
+                                                .foregroundStyle(.secondary)
+                                                .layoutPriority(1)
+                                        }
+                                        .lineLimit(1)
                                         
-                                        Text(String(format: "$%.0f–$%.0f", min, max))
-                                            .contentTransition(.opacity)
-                                            .font(.subheadline)
-                                            .foregroundStyle(.secondary)
+                                        if let r = h.regionCoordinate, let l = h.locationCoordinate {
+                                            MapView(annotation: name, regionCoordinate: r, locationCoordinate: l)
+                                                .frame(height: 200)
+                                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        }
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 }
@@ -165,20 +177,3 @@ private struct SelectRow<Content: View>: View {
         .geometryGroup()
     }
 }
-
-//private struct SelectRow<Content: View>: View {
-//    let isSelected: Bool
-//    let action: () -> Void
-//    @ViewBuilder var content: Content
-//
-//    var body: some View {
-//        Button(action: action) {
-//            HStack {
-//                content
-//                if isSelected {
-//                    Image(systemName: "checkmark.circle.fill").foregroundStyle(.tint)
-//                }
-//            }
-//        }
-//    }
-//}
