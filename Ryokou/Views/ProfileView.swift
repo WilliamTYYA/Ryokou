@@ -20,51 +20,76 @@ struct ProfileView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Name", text: $nameInput)
-                    TextField("City", text: $cityInput)
-                    TextField("Country", text: $countryInput)
+                    FloatingLabelTextField(
+                        "Name",
+                        text: $nameInput,
+                        isEnabled: isEditing
+                    )
+                    FloatingLabelTextField(
+                        "City",
+                        text: $cityInput,
+                        isEnabled: isEditing
+                    )
+                    FloatingLabelTextField(
+                        "Country",
+                        text: $countryInput,
+                        isEnabled: isEditing
+                    )
                 } header: {
                     HStack {
                         Text("Profile")
                         Spacer()
-                        if !isEditing {
-                            ReadOnlyChip().allowsHitTesting(false)
-                        }
+                        ReadOnlyChip().allowsHitTesting(false)
+                            .opacity(!isEditing ? 1 : 0)
                     }
                 }
-                .disabled(!isEditing)
-                .opacity(isEditing ? 1 : 0.75)
+//                .disabled(!isEditing)
+//                .opacity(isEditing ? 1 : 0.75)
                 
                 Section {
-                    TextField("Flight Budget", text: $flightBudgetInput)
-                        .keyboardType(.decimalPad)
-                    TextField("Hotel Budget", text: $hotelBudgetInput)
-                        .keyboardType(.decimalPad)
-                    TextField("Activities Budget", text: $activitiesBudgetInput)
-                        .keyboardType(.decimalPad)
+                    FloatingLabelTextField(
+                        "Flight",
+                        text: $flightBudgetInput,
+                        keyboard: .decimalPad,
+                        isEnabled: isEditing
+                    )
+                    FloatingLabelTextField(
+                        "Hotel",
+                        text: $hotelBudgetInput,
+                        keyboard: .decimalPad,
+                        isEnabled: isEditing
+                    )
+                    FloatingLabelTextField(
+                        "Activities",
+                        text: $activitiesBudgetInput,
+                        keyboard: .decimalPad,
+                        isEnabled: isEditing
+                    )
                 } header: {
                     HStack {
                         Text("Budgets (USD)")
                         Spacer()
-                        if !isEditing {
-                            ReadOnlyChip().allowsHitTesting(false)
-                        }
+                        ReadOnlyChip().allowsHitTesting(false)
+                            .opacity(!isEditing ? 1 : 0)
                     }
                 }
-                .disabled(!isEditing)
-                .opacity(isEditing ? 1 : 0.75)
+//                .disabled(!isEditing)
+//                .opacity(isEditing ? 1 : 0.75)
                 
-                VStack(spacing: 16) {
-                    Text("Hello, Dummy").font(.title2)
-                    Button("Sign out", action: {})
-                        .buttonStyle(.bordered)
+//                VStack(spacing: 16) {
 //                    Text("Hello, \(username)").font(.title2)
 //                    Button("Sign out", action: onSignOut)
 //                        .buttonStyle(.bordered)
-                }
+//                }
             }
             .navigationTitle("Setup Profile")
             .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    if isEditing {
+                        Button("Cancel") { cancelEdits() }
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         if isEditing {
@@ -80,29 +105,44 @@ struct ProfileView: View {
                     .animation(.none, value: isEditing)
                 }
             }
-            .alert(isPresented: $showError) {
-                Alert(
-                    title: Text("Invalid Input"),
-                    message: Text("Please ensure all budget fields contain valid numbers."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
+//            .alert(isPresented: $showError) {
+//                Alert(
+//                    title: Text("Invalid Input"),
+//                    message: Text("Please ensure all budget fields contain valid numbers."),
+//                    dismissButton: .default(Text("OK"))
+//                )
+//            }
+            .alert("Invalid Input",
+                   isPresented: $showError,
+                   actions: { Button("OK", role: .cancel) { reloadFromProfile() } },
+                   message: { Text("Please ensure all budget fields contain valid numbers.") }
+            )
             .onAppear {
-                // Prepopulate fields from stored profile
-                nameInput = profile.username
-                cityInput = profile.location.city
-                countryInput = profile.location.country
-                if let flight = profile.budgetAmount(for: "Flight") {
-                    flightBudgetInput = String(format: "%.2f", flight)
-                }
-                if let hotel = profile.budgetAmount(for: "Hotel") {
-                    hotelBudgetInput = String(format: "%.2f", hotel)
-                }
-                if let activities = profile.budgetAmount(for: "Activity") {
-                    activitiesBudgetInput = String(format: "%.2f", activities)
-                }
+                reloadFromProfile()
             }
+            .onDisappear { cancelEdits() }
         }
+    }
+    
+    private func reloadFromProfile() {
+        nameInput = profile.username
+        cityInput = profile.location.city
+        countryInput = profile.location.country
+        if let v = profile.budgetAmount(for: "Flight") {
+            flightBudgetInput = String(format: "%.2f", v)
+        }
+        if let v = profile.budgetAmount(for: "Hotel") {
+            hotelBudgetInput = String(format: "%.2f", v)
+        }
+        if let v = profile.budgetAmount(for: "Activity") {
+            activitiesBudgetInput = String(format: "%.2f", v)
+        }
+    }
+    
+    private func cancelEdits() {
+        isEditing = false
+        // throw away unsaved text and restore from AppStorage
+        reloadFromProfile()
     }
     
     private func saveProfile() {
