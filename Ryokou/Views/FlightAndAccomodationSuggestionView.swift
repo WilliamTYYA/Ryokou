@@ -10,121 +10,120 @@ struct FlightAndAccomodationSuggestionView: View {
     }
     
     var body: some View {
-//        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 24) {
+        LazyVStack(alignment: .leading, spacing: 24) {
+            
+            if let flights = suggestion.flights {
+                OptionSectionHeader(
+                    systemImage: "airplane.circle.fill",
+                    title: "Flights"
+                )
                 
-                if let flights = suggestion.flights {
-                    OptionSectionHeader(
-                        systemImage: "airplane.circle.fill",
-                        title: "Flights"
-                    )
-                    
-                    LazyVStack(alignment: .leading, spacing: 14) {
-                        ForEach(Array(flights.enumerated()), id: \.offset) { idx, f in
-                            if let airline = f.airline,
-                               let flightNumber = f.flightNumber,
-                               let departureTime = f.departureTime,
-                               let arrivalTime = f.arrivalTime,
-                               let price = f.price {
-                                
-                                let isSelected = viewModel.selectedFlight?.flightNumber == flightNumber
-                                
-                                SelectRow(isSelected: isSelected) {
-                                    viewModel.selectedFlight = FlightResult(
-                                        airline: airline,
-                                        flightNumber: flightNumber,
-                                        price: price,
-                                        departureTime: departureTime,
-                                        arrivalTime: arrivalTime
-                                    )
-                                } content: {
+                LazyVStack(alignment: .leading, spacing: 14) {
+                    ForEach(Array(flights.enumerated()), id: \.offset) { idx, f in
+                        if let airline = f.airline,
+                           let flightNumber = f.flightNumber,
+                           let departureTime = f.departureTime,
+                           let arrivalTime = f.arrivalTime,
+                           let price = f.price {
+                            
+                            let isSelected = viewModel.selectedFlight?.flightNumber == flightNumber
+                            
+                            SelectRow(isSelected: isSelected) {
+                                viewModel.selectedFlight = FlightResult(
+                                    airline: airline,
+                                    flightNumber: flightNumber,
+                                    price: price,
+                                    departureTime: departureTime,
+                                    arrivalTime: arrivalTime
+                                )
+                            } content: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("\(airline) \(flightNumber)")
+                                            .contentTransition(.opacity)
+                                            .font(.headline)
+                                        
+                                        Text("\(departureTime) → \(arrivalTime)")
+                                            .contentTransition(.opacity)
+                                            .font(.subheadline)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Text(String(format: "$%.0f", price))
+                                        .contentTransition(.opacity)
+                                        .fontWeight(.semibold)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if let hotels = suggestion.hotels {
+                OptionSectionHeader(
+                    systemImage: "bed.double.circle.fill",
+                    title: "Hotels"
+                )
+                
+                LazyVStack(alignment: .leading, spacing: 14) {
+                    ForEach(Array(hotels.enumerated()), id: \.offset) { idx, h in
+                        if let name = h.name,
+                           let min = h.minimumPrice,
+                           let max = h.maximumPrice {
+                            
+                            let isSelected = viewModel.selectedHotel?.name == name
+                            
+                            SelectRow(isSelected: isSelected) {
+                                viewModel.selectedHotel = HotelResult(
+                                    name: name,
+                                    minimumPrice: min,
+                                    maximumPrice: max,
+                                    latitude: h.latitude,
+                                    longitude: h.longitude
+                                )
+                            } content: {
+                                VStack(alignment: .leading, spacing: 8) {
                                     HStack {
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text("\(airline) \(flightNumber)")
-                                                .contentTransition(.opacity)
-                                                .font(.headline)
-                                            
-                                            Text("\(departureTime) → \(arrivalTime)")
-                                                .contentTransition(.opacity)
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
-                                        }
+                                        Text(name)
+                                            .contentTransition(.opacity)
+                                            .font(.headline)
                                         
                                         Spacer()
                                         
-                                        Text(String(format: "$%.0f", price))
+                                        Text(String(format: "$%.0f–$%.0f", min, max))
                                             .contentTransition(.opacity)
-                                            .fontWeight(.semibold)
+                                            .font(.subheadline)
+                                            .foregroundStyle(.secondary)
+                                            .layoutPriority(1)
+                                    }
+                                    .lineLimit(1)
+                                    
+                                    if let r = h.regionCoordinate, let l = h.locationCoordinate {
+                                        MapView(annotation: name, regionCoordinate: r, locationCoordinate: l)
+                                            .frame(height: 200)
+                                            .clipShape(RoundedRectangle(cornerRadius: 12))
                                     }
                                 }
-                            }
-                        }
-                    }
-                }
-                
-                if let hotels = suggestion.hotels {
-                    OptionSectionHeader(
-                        systemImage: "bed.double.circle.fill",
-                        title: "Hotels"
-                    )
-                    
-                    LazyVStack(alignment: .leading, spacing: 14) {
-                        ForEach(Array(hotels.enumerated()), id: \.offset) { idx, h in
-                            if let name = h.name,
-                               let min = h.minimumPrice,
-                               let max = h.maximumPrice {
-                                
-                                let isSelected = viewModel.selectedHotel?.name == name
-                                
-                                SelectRow(isSelected: isSelected) {
-                                    viewModel.selectedHotel = HotelResult(
-                                        name: name,
-                                        minimumPrice: min,
-                                        maximumPrice: max,
-                                        latitude: h.latitude,
-                                        longitude: h.longitude
-                                    )
-                                } content: {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        HStack {
-                                            Text(name)
-                                                .contentTransition(.opacity)
-                                                .font(.headline)
-                                            
-                                            Spacer()
-                                            
-                                            Text(String(format: "$%.0f–$%.0f", min, max))
-                                                .contentTransition(.opacity)
-                                                .font(.subheadline)
-                                                .foregroundStyle(.secondary)
-                                                .layoutPriority(1)
-                                        }
-                                        .lineLimit(1)
-                                        
-                                        if let r = h.regionCoordinate, let l = h.locationCoordinate {
-                                            MapView(annotation: name, regionCoordinate: r, locationCoordinate: l)
-                                                .frame(height: 200)
-                                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
                     }
                 }
             }
-            .animation(.easeOut, value: suggestion)
-            .itineraryStyle()
-            .navigationTitle("Choose Options")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Confirm") {
-                        // handle confirm
-                    }
-                    .disabled(!viewModel.canConfirm)
+        }
+        .animation(.easeOut, value: suggestion)
+        .itineraryStyle()
+        .navigationTitle("Choose Options")
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Confirm") {
+                    // handle confirm
                 }
+                .disabled(!viewModel.canConfirm)
             }
+        }
     }
 }
 
