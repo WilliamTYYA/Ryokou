@@ -7,6 +7,7 @@
 
 import FoundationModels
 import Observation
+import Foundation
 
 @Observable
 @MainActor
@@ -57,7 +58,7 @@ final class FlightAndAccommodationSuggestionGenerator {
                 self.suggestion = partialResponse.content
             }
         } catch {
-            print("error \(error)")
+            Log.e("FlightAndAccommodationSuggestionGenerator", error.localizedDescription)
             self.error = error
         }
     }
