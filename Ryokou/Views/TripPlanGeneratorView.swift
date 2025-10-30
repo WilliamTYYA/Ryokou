@@ -35,6 +35,7 @@ struct TripPlanGeneratorView: View {
                     viewModel: flightAndAccommodationSuggestionViewModel,
                     suggestion: flightAndAccommodationSuggestion
                 )
+                .padding()
             }
         }
         .scrollDisabled(!requestedItinerary)
