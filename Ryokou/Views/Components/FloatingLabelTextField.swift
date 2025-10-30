@@ -51,6 +51,8 @@ struct FloatingLabelTextField: View {
             .padding(.horizontal, 14)
             .padding(.vertical, 12)
             .padding(.top, 8)
+            .disabled(!isEnabled)
+            .opacity(isEnabled ? 1 : 0.75)
             
             Text(label)
                 .foregroundStyle(.secondary)
@@ -66,7 +68,7 @@ struct FloatingLabelTextField: View {
         }
         .overlay {
             RoundedRectangle(cornerRadius: corner)
-                .stroke(focused ? Color.accentColor.opacity(0.7) : Color.secondary.opacity(0.25), lineWidth: 1)
+                .stroke(focused ? Color.yellow.opacity(0.5) : Color.secondary.opacity(0.25), lineWidth: focused ? 1.5 : 1)
         }
         .animation(.easeOut(duration: 0.18), value: focused || !text.isEmpty)
     }
