@@ -9,12 +9,12 @@ import SwiftUI
 
 struct MessageView: View {
     let error: Error?
-    let landmark: Destination
+    let destination: Destination
     let message: String?
     
-    init(error: Error? = nil, landmark: Destination, message: String? = nil) {
+    init(error: Error? = nil, destination: Destination, message: String? = nil) {
         self.error = error
-        self.landmark = landmark
+        self.destination = destination
         self.message = message
     }
     
@@ -35,7 +35,7 @@ struct MessageView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(alignment: .top) {
-            ItineraryHeader(destination: landmark)
+            ItineraryHeader(destination: destination)
             .opacity(0.6)
         }
     }

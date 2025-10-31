@@ -116,14 +116,6 @@ struct FlightAndAccomodationSuggestionView: View {
         .animation(.easeOut, value: suggestion)
         .itineraryStyle()
         .navigationTitle("Choose Options")
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Confirm") {
-                    // handle confirm
-                }
-                .disabled(!viewModel.canConfirm)
-            }
-        }
     }
 }
 

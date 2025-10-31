@@ -8,9 +8,9 @@
 import Foundation
 //import Calendar
 
-struct TripContext: Equatable {
+struct TripContext: Equatable, Hashable {
     let origin: String
-    let destination: String
+    let destination: Destination
     let flightBudgetUSD: Double
     let hotelBudgetUSD: Double
     let departureDateISO: String   // "YYYY-MM-DD"
@@ -25,10 +25,10 @@ extension TripContext {
         return f
     }()
     
-    static func from(profile: Profile, landmark: Destination, departureDate: Date, returnDate: Date) -> TripContext {
+    static func from(profile: Profile, destination: Destination, departureDate: Date, returnDate: Date) -> TripContext {
         TripContext(
             origin: profile.location.city,
-            destination: landmark.name,
+            destination: destination,
             flightBudgetUSD: profile.flightBudgetUSD,
             hotelBudgetUSD: profile.hotelBudgetUSD,
             departureDateISO: df.string(from: departureDate),

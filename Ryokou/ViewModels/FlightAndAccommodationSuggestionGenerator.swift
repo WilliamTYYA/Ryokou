@@ -54,7 +54,6 @@ final class FlightAndAccommodationSuggestionGenerator {
             )
             
             for try await partialResponse in stream {
-                print("stream \(partialResponse.content)")
                 self.suggestion = partialResponse.content
             }
         } catch {

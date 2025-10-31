@@ -7,11 +7,12 @@
 
 import SwiftUI
 
-/// The main tab view shown after the user has created their profile. It contains
-/// tabs for searching new trips, viewing saved trips and editing the profile.
+//let username: String
+//let onSignOut: () -> Void
+
+//ProfileView(username: username, onSignOut: onSignOut)
+
 struct RyokouTabView: View {
-//    let username: String
-//    let onSignOut: () -> Void
     
     var body: some View {
         TabView {
@@ -26,7 +27,6 @@ struct RyokouTabView: View {
                 }
                 
             ProfileView()
-//                ProfileView(username: username, onSignOut: onSignOut)
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }

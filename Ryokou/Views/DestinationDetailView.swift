@@ -2,19 +2,21 @@ import FoundationModels
 import SwiftUI
 
 struct DestinationDetailView: View {
-    let landmark: Destination
+    let destination: Destination
+    @Environment(NavigationModel.self) private var navigationModel
     
     private let model = SystemLanguageModel.default
 
     var body: some View {
-        // MARK: - [CODE-ALONG] Chapter 1.4.3: Replace availability with model.availability
         switch model.availability {
         case .available:
-            TripPlanGeneratorView(landmark: landmark)
+            TripPlanGeneratorView(destination: destination) { ctx in
+                navigationModel.tripPlanPath.append(.suggestions(ctx))
+            }
             
         case .unavailable:
             MessageView(
-                landmark: self.landmark,
+                destination: self.destination,
                 message: """
                          Trip Planner is unavailable because \
                          Apple Intelligence has not been turned on.
@@ -22,7 +24,7 @@ struct DestinationDetailView: View {
             )
         @unknown default:
             MessageView(
-                landmark: self.landmark,
+                destination: self.destination,
                 message: """
                          Trip Planner is unavailable. Try again later.
                          """

@@ -8,12 +8,12 @@ A structure for creating custom visual effects with SwiftUI.
 import SwiftUI
 
 struct HeaderStyle: ViewModifier {
-    let landmark: Destination
+    let destination: Destination
     
     func body(content: Content) -> some View {
         content
             .background(alignment: .top) {
-                ItineraryHeader(destination: landmark)
+                ItineraryHeader(destination: destination)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -148,7 +148,7 @@ extension View {
         modifier(BlurredBackgroundModifier())
     }
     
-    func headerStyle(landmark: Destination) -> some View {
-        modifier(HeaderStyle(landmark: landmark))
+    func headerStyle(destination: Destination) -> some View {
+        modifier(HeaderStyle(destination: destination))
     }
 }

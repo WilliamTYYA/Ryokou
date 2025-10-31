@@ -116,7 +116,7 @@ struct LoginView: View {
         }
         // Keep VM in sync with storage
         .onAppear { vm.bootstrap(isLoggedIn: storedIsLoggedIn, username: storedUsername) }
-        .onChange(of: storedIsLoggedIn) { vm.update(isLoggedIn: $0) }
-        .onChange(of: storedUsername)   { vm.update(username: $0) }
+        .onChange(of: storedIsLoggedIn) { _, new in vm.update(isLoggedIn: new) }
+        .onChange(of: storedUsername)   { _, new in vm.update(username: new) }
     }
 }

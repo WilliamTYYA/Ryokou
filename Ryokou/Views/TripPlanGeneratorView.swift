@@ -1,67 +1,46 @@
+//
+//  TripPlanGeneratorView.swift
+//  Ryokou
+//
+//  Created by Thiha Ye Yint Aung on 10/31/25.
+//
+
 import SwiftUI
 
 struct TripPlanGeneratorView: View {
-    let landmark: Destination
+    let destination: Destination
+    let onGenerate: (TripContext) -> Void
     
-    @State private var flightAndAccommodationSuggestionGenerator: FlightAndAccommodationSuggestionGenerator?
-    @State private var flightAndAccommodationSuggestionViewModel: FlightAndAccommodationSuggestionViewModel = .init()
-
     @AppStorage("profile") private var profile: Profile = .sample
-    @State private var requestedItinerary: Bool = false
-    
     @State private var departure = Date()
     @State private var returning = Calendar.current.date(byAdding: .day, value: 3, to: Date())!
     
     var body: some View {
-        ScrollView {
-            if !requestedItinerary {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text(landmark.name)
-                        .padding(.top, 150)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    
-                    Text(landmark.description)
-                    
-                    DateRangeFields(departure: $departure,
-                                    returning: $returning,
-                                    minimumNights: 1)
-                        .padding(.top, 8)
-                }
-                .padding(.horizontal)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            } else if let flightAndAccommodationSuggestion = flightAndAccommodationSuggestionGenerator?.suggestion {
-                FlightAndAccomodationSuggestionView(
-                    viewModel: flightAndAccommodationSuggestionViewModel,
-                    suggestion: flightAndAccommodationSuggestion
-                )
-                .padding()
-            }
+        VStack(alignment: .leading, spacing: 16) {
+            Text(destination.name)
+                .padding(.top, 150)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
+            Text(destination.description)
+            
+            DateRangeFields(departure: $departure,
+                            returning: $returning,
+                            minimumNights: 1)
+            .padding(.top, 8)
         }
-        .scrollDisabled(!requestedItinerary)
+        .padding(.horizontal)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .safeAreaInset(edge: .bottom) {
             GenerateButton(label: "Options") {
-                requestedItinerary = true
                 let ctx = TripContext.from(profile: profile,
-                                           landmark: landmark,
+                                           destination: destination,
                                            departureDate: departure,
                                            returnDate: returning)
-                await flightAndAccommodationSuggestionGenerator?.generateTripSuggestion(context: ctx)
+                
+                onGenerate(ctx)
             }
         }
-        .task {
-            let generator = FlightAndAccommodationSuggestionGenerator()
-            self.flightAndAccommodationSuggestionGenerator = generator
-            
-            generator.prewarmModel()
-        }
-        .headerStyle(landmark: landmark)
+        .headerStyle(destination: destination)
     }
-    
-}
-
-#Preview {
-    TripPlanGeneratorView(
-        landmark: ModelData.destinations.first!
-    )
 }

@@ -8,23 +8,26 @@
 import SwiftUI
 
 struct DestinationListView: View {
+    @Environment(NavigationModel.self) private var navigationModel
     @State private var searchText = ""
     
-    private var filteredLandmarks: [Destination] {
+    private var filteredDestinations: [Destination] {
         ModelData.destinations.filter { lm in
             searchText.isEmpty || lm.name.localizedCaseInsensitiveContains(searchText)
         }
     }
     
     var body: some View {
-        NavigationStack {
+        @Bindable var navigationModel = navigationModel
+        
+        NavigationStack(path: $navigationModel.tripPlanPath) {
             ScrollView {
                 Text("Where would you like to go today!")
                     .font(.title)
                     .fontWeight(.bold)
                     .padding(.top, 8)
                 
-                if filteredLandmarks.isEmpty {
+                if filteredDestinations.isEmpty {
                     VStack(spacing: 12) {
                         Image(systemName: "magnifyingglass")
                             .font(.largeTitle)
@@ -37,9 +40,9 @@ struct DestinationListView: View {
                     .frame(maxWidth: .infinity, minHeight: 240)
                 } else {
                     LazyVStack(alignment: .center, spacing: 20) {
-                        ForEach(filteredLandmarks) { landmark in
-                            NavigationLink(destination: DestinationDetailView(landmark: landmark)) {
-                                DestinationListCardView(landmark: landmark)
+                        ForEach(filteredDestinations) { destination in
+                            NavigationLink(value: TripPlanRoute.destination(destination)) {
+                                DestinationListCardView(destination: destination)
                                     .frame(height: 200)
                             }
                             .buttonStyle(.plain)
@@ -50,31 +53,38 @@ struct DestinationListView: View {
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: TripPlanRoute.self) { route in
+                switch route {
+                case .destination(let destination):
+                    DestinationDetailView(destination: destination)
+                    
+                case .suggestions(let ctx):
+                    FlightAndAccommodationSuggestionScreen(context: ctx) { selection in
+                        navigationModel.tripPlanPath.append(.itinerary(ctx, selection))
+                    }
+                    
+                case .itinerary(let ctx, let selection):
+                    Text("Itinerary!")
+                }
+            }
         }
         .searchable(text: $searchText, prompt: "Search Cities")
         .disableAutocorrection(true)
         .textInputAutocapitalization(.never)
-//        .searchSuggestions {
-//            // quick suggestions
-//            ForEach(ModelData.landmarks) { lm in
-//                Text(lm.name).searchCompletion(lm.name)
-//            }
-//        }
     }
 }
 
 struct DestinationListCardView: View {
-    let landmark: Destination
+    let destination: Destination
     
     var body: some View {
-        
-        Image(landmark.thumbnailImageName)
+        Image(destination.thumbnailImageName)
             .resizable()
             .overlay {
                 ReadabilityRoundedRectangle()
             }
             .overlay(alignment: .bottomLeading) {
-                Text(landmark.name)
+                Text(destination.name)
                     .font(.title2)
                     .foregroundColor(.white)
                     .bold()
@@ -84,4 +94,3 @@ struct DestinationListCardView: View {
             .clipped()
     }
 }
-

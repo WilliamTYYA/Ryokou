@@ -21,7 +21,7 @@ public struct HotelSearchArguments: Codable {
 
 
 @Generable
-public struct HotelResult: Codable, Equatable {
+public struct HotelResult: Codable, Equatable, Hashable {
     public var name: String
     public var minimumPrice: Double?
     public var maximumPrice: Double?
