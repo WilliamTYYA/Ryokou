@@ -63,7 +63,6 @@ final class FlightAndAccommodationSuggestionGenerator {
     }
     
     func prewarmModel() {
-        // MARK: - [CODE-ALONG] Chapter 6.1.1: Add a function to pre-warm the model
         session.prewarm()
     }
 }
