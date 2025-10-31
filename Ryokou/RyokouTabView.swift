@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-//let username: String
-//let onSignOut: () -> Void
-
-//ProfileView(username: username, onSignOut: onSignOut)
-
 struct RyokouTabView: View {
     
     var body: some View {
