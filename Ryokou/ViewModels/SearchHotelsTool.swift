@@ -1,5 +1,5 @@
 import FoundationModels
-import SwiftUI
+import Foundation
 import CoreLocation
 import MapKit
 

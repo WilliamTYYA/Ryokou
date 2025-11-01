@@ -9,6 +9,8 @@ import SwiftUI
 
 struct DestinationListView: View {
     @Environment(NavigationModel.self) private var navigationModel
+    @State private var tripPlanViewModel: TripPlanViewModel = .init()
+    
     @State private var searchText = ""
     
     private var filteredDestinations: [Destination] {
@@ -58,12 +60,10 @@ struct DestinationListView: View {
                 case .destination(let destination):
                     DestinationDetailView(destination: destination)
                     
-                case .suggestions(let ctx):
-                    FlightAndAccommodationSuggestionScreen(context: ctx) { selection in
-                        navigationModel.tripPlanPath.append(.itinerary(ctx, selection))
-                    }
+                case .suggestions:
+                    FlightAndAccommodationSuggestionScreen() 
                     
-                case .itinerary(let ctx, let selection):
+                case .itinerary:
                     Text("Itinerary!")
                 }
             }
@@ -71,6 +71,7 @@ struct DestinationListView: View {
         .searchable(text: $searchText, prompt: "Search Cities")
         .disableAutocorrection(true)
         .textInputAutocapitalization(.never)
+        .environment(tripPlanViewModel)
     }
 }
 

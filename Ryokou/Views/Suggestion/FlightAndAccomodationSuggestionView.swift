@@ -2,12 +2,13 @@ import SwiftUI
 
 struct FlightAndAccomodationSuggestionView: View {
     private let suggestion: FlightAndAccommodationSuggestion.PartiallyGenerated
-    private var viewModel: FlightAndAccommodationSuggestionViewModel
     
-    init(viewModel flightAndAccomodationSuggestionViewModel: FlightAndAccommodationSuggestionViewModel, suggestion flightAndAccomodationSuggestion: FlightAndAccommodationSuggestion.PartiallyGenerated) {
+    init(suggestion flightAndAccomodationSuggestion: FlightAndAccommodationSuggestion.PartiallyGenerated) {
         self.suggestion = flightAndAccomodationSuggestion
-        self.viewModel = flightAndAccomodationSuggestionViewModel
     }
+    
+    @Environment(NavigationModel.self) private var navigationModel
+    @Environment(TripPlanViewModel.self) private var tripPlanViewModel
     
     var body: some View {
         LazyVStack(alignment: .leading, spacing: 24) {
@@ -26,10 +27,10 @@ struct FlightAndAccomodationSuggestionView: View {
                            let arrivalTime = f.arrivalTime,
                            let price = f.price {
                             
-                            let isSelected = viewModel.selectedFlight?.flightNumber == flightNumber
+                            let isSelected = tripPlanViewModel.selectedFlight?.flightNumber == flightNumber
                             
                             SelectRow(isSelected: isSelected) {
-                                viewModel.selectedFlight = FlightResult(
+                                tripPlanViewModel.selectedFlight = FlightResult(
                                     airline: airline,
                                     flightNumber: flightNumber,
                                     price: price,
@@ -73,10 +74,10 @@ struct FlightAndAccomodationSuggestionView: View {
                            let min = h.minimumPrice,
                            let max = h.maximumPrice {
                             
-                            let isSelected = viewModel.selectedHotel?.name == name
+                            let isSelected = tripPlanViewModel.selectedAccommodation?.name == name
                             
                             SelectRow(isSelected: isSelected) {
-                                viewModel.selectedHotel = HotelResult(
+                                tripPlanViewModel.selectedAccommodation = HotelResult(
                                     name: name,
                                     minimumPrice: min,
                                     maximumPrice: max,
@@ -116,6 +117,14 @@ struct FlightAndAccomodationSuggestionView: View {
         .animation(.easeOut, value: suggestion)
         .itineraryStyle()
         .navigationTitle("Choose Options")
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Confirm") {
+                    navigationModel.tripPlanPath.append(.itinerary)
+                }
+                .disabled(!tripPlanViewModel.confirmFlightAndAccommodation)
+            }
+        }
     }
 }
 

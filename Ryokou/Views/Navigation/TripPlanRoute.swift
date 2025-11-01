@@ -9,8 +9,8 @@ import Foundation
 
 enum TripPlanRoute: Hashable {
     case destination(Destination)
-    case suggestions(TripContext)
-    case itinerary(TripContext, SelectedOptions)
+    case suggestions
+    case itinerary
 }
 
 struct SelectedOptions: Hashable {

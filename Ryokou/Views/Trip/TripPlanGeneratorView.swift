@@ -9,7 +9,9 @@ import SwiftUI
 
 struct TripPlanGeneratorView: View {
     let destination: Destination
-    let onGenerate: (TripContext) -> Void
+    
+    @Environment(NavigationModel.self) private var navigationModel
+    @Environment(TripPlanViewModel.self) private var tripPlanViewModel
     
     @AppStorage("profile") private var profile: Profile = .sample
     @State private var departure = Date()
@@ -37,8 +39,12 @@ struct TripPlanGeneratorView: View {
                                            destination: destination,
                                            departureDate: departure,
                                            returnDate: returning)
+                if tripPlanViewModel.tripContext != ctx {
+                    tripPlanViewModel.tripContext = ctx
+                    tripPlanViewModel.prewarmFlightAndAccommodationGenerator()
+                }
                 
-                onGenerate(ctx)
+                navigationModel.tripPlanPath.append(.suggestions)
             }
         }
         .headerStyle(destination: destination)

@@ -1,5 +1,5 @@
 import FoundationModels
-import SwiftUI
+import Foundation
 
 @Generable
 public struct RestaurantSearchArguments: Codable {

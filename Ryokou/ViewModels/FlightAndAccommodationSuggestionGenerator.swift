@@ -10,11 +10,11 @@ import Observation
 import Foundation
 
 @Observable
-@MainActor
 final class FlightAndAccommodationSuggestionGenerator {
     private var session: LanguageModelSession
     private(set) var suggestion: FlightAndAccommodationSuggestion.PartiallyGenerated?
     
+    var tripContext: TripContext?
     var error: Error?
     
     init() {
@@ -35,6 +35,7 @@ final class FlightAndAccommodationSuggestionGenerator {
     
     func generateTripSuggestion(context: TripContext) async {
         do {
+            self.tripContext = context
             /**
              let prompt = Prompt {
              "Plan a round‑trip from Chicago (ORD) to Paris (CDG), departing 2025‑12‑01 and returning 2025‑12‑04."
@@ -60,6 +61,11 @@ final class FlightAndAccommodationSuggestionGenerator {
             Log.e("FlightAndAccommodationSuggestionGenerator", error.localizedDescription)
             self.error = error
         }
+    }
+    
+    func resetSuggestion() {
+        Log.i("FlightAndAccommodationSuggestionGenerator", "resetSuggestion")
+        suggestion = nil
     }
     
     func prewarmModel() {
