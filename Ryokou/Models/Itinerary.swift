@@ -100,7 +100,11 @@ extension Itinerary {
                         title: "The Hotel",
                         description:
                             "Spend one final evening in the hotspring before heading home."
-                    )
+                    ),
+                    Activity(
+                        type: .flight,
+                        title: "The Flight",
+                        description: "Take a flight AAL741 departing from Los Angeles International Airport (LAX) to Japan.")
                 ]
             )
         ]
