@@ -11,9 +11,9 @@ import FoundationModels
     let hotelBudget: Double = 1000.0      // per-night budget for hotels
     
     let instructions = Instructions {
-        "Your job is to create an itinerary for the user based on the provided flight and hotel information in the destination location"
-        "On the first day and last days, you must include one flight and one hotel activities."
-        "Each day, you must include one sightseeing, one restaurant or one shopping activities"
+        "Create an itinerary using the user’s provided flight and hotel information for the destination."
+        "On the first day, you MUST include a flight and a hotel activity based on the user’s provided flight and hotel information."
+        "Each day should include one sightseeing, one dining or shopping, and one lodging activity."
         
         "Use the `searchFlights` tool to find flight options within the flight budget unless an information is provided."
         "Use the `searchHotels` tool to find hotels within the hotel budget in the destination city unless an information is provided."
