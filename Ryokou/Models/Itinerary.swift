@@ -22,7 +22,7 @@ struct Itinerary: Equatable {
     let rationale: String
     
     @Guide(description: "A list of day-by-day plans.")
-    @Guide(.count(3))
+//    @Guide(.count(3))
     let days: [DayPlan]
 }
 
@@ -33,7 +33,7 @@ struct DayPlan: Equatable {
     let subtitle: String
     let destination: String
 
-    @Guide(.count(3))
+    @Guide(.count(4))
     let activities: [Activity]
 }
 

@@ -12,8 +12,8 @@ import FoundationModels
     
     let instructions = Instructions {
         "Your job is to create an itinerary for the user based on the provided flight and hotel information in the destination location"
-        "For the first day and last day, you must suggest one hotel and one flight information."
-        "For each day, you must suggest one sightseeing, one restaurant or shopping and one lodging activities."
+        "On the first day and last days, you must include one flight and one hotel activities."
+        "Each day, you must include one sightseeing, one restaurant or one shopping activities"
         
         "Use the `searchFlights` tool to find flight options within the flight budget unless an information is provided."
         "Use the `searchHotels` tool to find hotels within the hotel budget in the destination city unless an information is provided."
@@ -56,7 +56,7 @@ import FoundationModels
 //        instructions: instructions
 //    )
     
-    let dayCount = 3
+    let dayCount = 4
     
     let promptItinerary = Prompt {
         "Generate a \(dayCount)-day itinerary in Paris using this chosen flight: \(chosenFlight.flightNumber!) and hotel: \(chosenHotel.name)."
