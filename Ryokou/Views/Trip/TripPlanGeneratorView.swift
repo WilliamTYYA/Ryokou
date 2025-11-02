@@ -27,15 +27,14 @@ struct TripPlanGeneratorView: View {
             Text(destination.description)
             
             DateRangeFields(departure: $departure,
-                            returning: $returning,
-                            minimumNights: 1)
+                            returning: $returning)
             .padding(.top, 8)
         }
         .padding(.horizontal)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .safeAreaInset(edge: .bottom) {
             GenerateButton(label: "Options") {
-                let ctx = TripContext.from(profile: profile,
+                let ctx = ModelContext.from(profile: profile,
                                            destination: destination,
                                            departureDate: departure,
                                            returnDate: returning)

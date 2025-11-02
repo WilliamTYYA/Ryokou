@@ -12,8 +12,3 @@ enum TripPlanRoute: Hashable {
     case suggestions
     case itinerary
 }
-
-struct SelectedOptions: Hashable {
-    let flight: FlightResult
-    let hotel: HotelResult
-}

@@ -11,7 +11,7 @@ import FoundationModels
 // MARK: - Trip suggestion model
 
 @Generable
-public struct FlightAndAccommodationSuggestion: Codable, Equatable {
+public struct FlightAndHotelSuggestion: Codable, Equatable {
     @Guide(.count(3))
     public var flights: [FlightResult]
     @Guide(.count(3))

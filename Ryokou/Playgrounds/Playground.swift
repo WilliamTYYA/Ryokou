@@ -35,7 +35,7 @@ import FoundationModels
     // First model call – returns flight and hotel suggestions
     let responseFlightAndHotel = try await session.respond(
         to: promptFlightAndAccommodation,
-        generating: FlightAndAccommodationSuggestion.self
+        generating: FlightAndHotelSuggestion.self
     )
     
     let _ = responseFlightAndHotel
