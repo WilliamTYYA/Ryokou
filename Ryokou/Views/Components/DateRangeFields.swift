@@ -21,15 +21,14 @@ struct DateRangeFields: View {
     @Binding var returning: Date
     
     var earliestDeparture: Date = Date().startOfDayApp
-    var latest: Date = Calendar.app.date(byAdding: .year, value: 1, to: Date())!
-    var minimumNights: Int = 0
+    var latest: Date = Calendar.app.date(byAdding: .day, value: 5, to: Date())!
+    var minimumNights: Int = 1
     
     private var earliestReturn: Date { departure.startOfDayApp.addingDays(minimumNights) }
     
-    init(departure: Binding<Date>, returning: Binding<Date>, minimumNights: Int = 1) {
+    init(departure: Binding<Date>, returning: Binding<Date>) {
         self._departure = departure
         self._returning = returning
-        self.minimumNights = minimumNights
     }
     
     var body: some View {

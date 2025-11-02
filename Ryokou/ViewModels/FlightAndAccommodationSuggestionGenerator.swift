@@ -1,10 +1,3 @@
-/*
- See the LICENSE.txt file for this sample’s licensing information.
- 
- Abstract:
- A class that generates an itinerary.
- */
-
 import FoundationModels
 import Observation
 import Foundation
@@ -12,9 +5,9 @@ import Foundation
 @Observable
 final class FlightAndAccommodationSuggestionGenerator {
     private var session: LanguageModelSession
-    private(set) var suggestion: FlightAndAccommodationSuggestion.PartiallyGenerated?
+    private(set) var suggestion: FlightAndHotelSuggestion.PartiallyGenerated?
     
-    var tripContext: TripContext?
+    var tripContext: ModelContext?
     var error: Error?
     
     init() {
@@ -33,7 +26,7 @@ final class FlightAndAccommodationSuggestionGenerator {
         )
     }
     
-    func generateTripSuggestion(context: TripContext) async {
+    func generateTripSuggestion(context: ModelContext) async {
         do {
             self.tripContext = context
             /**
@@ -51,7 +44,7 @@ final class FlightAndAccommodationSuggestionGenerator {
             
             let stream = session.streamResponse(
                 to: prompt,
-                generating: FlightAndAccommodationSuggestion.self
+                generating: FlightAndHotelSuggestion.self
             )
             
             for try await partialResponse in stream {

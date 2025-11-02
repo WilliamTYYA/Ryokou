@@ -12,25 +12,26 @@ import Observation
 class TripPlanViewModel {
     private(set) var generatorFlightAndAccommodation: FlightAndAccommodationSuggestionGenerator?
     
-    var tripContext: TripContext? = nil
-    
-    var selectedFlight: FlightResult? = nil
-    var selectedAccommodation: HotelResult? = nil
-    
     func prewarmFlightAndAccommodationGenerator() {
         generatorFlightAndAccommodation = FlightAndAccommodationSuggestionGenerator()
         generatorFlightAndAccommodation!.prewarmModel()
     }
     
     var confirmFlightAndAccommodation: Bool {
-        selectedFlight != nil && selectedAccommodation != nil
+        selectedFlight != nil && selectedHotel != nil
     }
     
-    var selectedFlightAndAccommodation: SelectedOptions? {
-        guard let selectedFlight, let selectedAccommodation else {
-            return nil
-        }
-        return SelectedOptions(flight: selectedFlight, hotel: selectedAccommodation)
+    var tripContext: ModelContext? = nil
+    
+    var selectedFlight: FlightResult? { tripContext?.selectedFlight }
+    var selectedHotel: HotelResult? { tripContext?.selectedHotel }
+    
+    func setSelectedFlight(_ result: FlightResult) {
+        tripContext?.selectedFlight = result
+    }
+    
+    func setSelectedHotel(_ result: HotelResult) {
+        tripContext?.selectedHotel = result
     }
 }
 
