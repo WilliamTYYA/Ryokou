@@ -59,18 +59,17 @@ private struct DayView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             ZStack(alignment: .bottom) {
-//                MapView(
-//                    annotation: destination.name,
-//                    regionCoordinate: destination.coordinateRegion,
-//                    locationCoordinate: destination.locationCoordinate
-//                )
-//                .task(id: plan.destination) {
-//                    guard let destination = plan.destination, !destination.isEmpty else { return }
-//                    
-//                    if let fetchedItem = await LocationLookup().mapItem(atLocation: destination) {
-//                        self.mapItem = fetchedItem
-//                    }
-//                }
+                PlanDetailMapView(
+                    destination: destination,
+                    landmarkMapItem: mapItem
+                )
+                .task(id: plan.destination) {
+                    guard let planDestination = plan.destination, !planDestination.isEmpty else { return }
+                    
+                    if let fetchedItem = await LocationLookup().mapItem(atLocation: planDestination) {
+                        self.mapItem = fetchedItem
+                    }
+                }
                 
                 VStack(alignment: .leading) {
                     
