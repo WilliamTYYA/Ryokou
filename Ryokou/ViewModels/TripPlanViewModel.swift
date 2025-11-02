@@ -10,11 +10,11 @@ import Observation
 
 @Observable
 class TripPlanViewModel {
-    private(set) var generatorFlightAndAccommodation: FlightAndAccommodationSuggestionGenerator?
+    private(set) var tripSuggestionItineraryGenerator: TripSuggestionItineraryGenerator?
     
     func prewarmFlightAndAccommodationGenerator() {
-        generatorFlightAndAccommodation = FlightAndAccommodationSuggestionGenerator()
-        generatorFlightAndAccommodation!.prewarmModel()
+        tripSuggestionItineraryGenerator = TripSuggestionItineraryGenerator()
+        tripSuggestionItineraryGenerator!.prewarmModel()
     }
     
     var confirmFlightAndAccommodation: Bool {

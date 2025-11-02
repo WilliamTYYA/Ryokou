@@ -11,7 +11,7 @@ struct FlightAndAccommodationSuggestionScreen: View {
     @Environment(TripPlanViewModel.self) private var tripPlanViewModel
     
     var body: some View {
-        let generator = tripPlanViewModel.generatorFlightAndAccommodation
+        let generator = tripPlanViewModel.tripSuggestionItineraryGenerator
         let context = tripPlanViewModel.tripContext
         
         ScrollView {
@@ -28,7 +28,7 @@ struct FlightAndAccommodationSuggestionScreen: View {
         .task(id: context) {
             guard generator?.suggestion == nil || context != generator?.tripContext else { return }
             Log.i("FlightAndAccommodationSuggestionScreen", "Task is invoking for Generator!")
-            await generator?.generateTripSuggestion(context: context!)
+            await generator?.generateFlightAndHotelSuggestion(context: context!)
         }
     }
 }
