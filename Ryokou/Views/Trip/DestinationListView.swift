@@ -61,10 +61,14 @@ struct DestinationListView: View {
                     DestinationDetailView(destination: destination)
                     
                 case .suggestions:
-                    FlightAndAccommodationSuggestionScreen() 
+                    TripGenerationScreen(mode: .suggestions({ suggestion in
+                        FlightAndAccomodationSuggestionView(suggestion: suggestion)
+                    }))
                     
                 case .itinerary:
-                    Text("Itinerary!")
+                    TripGenerationScreen(mode: .itinerary({ itinerary in
+                        ItineraryView(itinerary: itinerary)
+                    }))
                 }
             }
         }
