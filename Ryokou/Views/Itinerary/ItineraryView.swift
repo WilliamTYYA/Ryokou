@@ -1,6 +1,7 @@
 import FoundationModels
 import SwiftUI
 import MapKit
+import SwiftData
 
 struct ItineraryView: View {
     private let itinerary: Itinerary.PartiallyGenerated
@@ -10,12 +11,11 @@ struct ItineraryView: View {
     }
     
     @Environment(TripPlanViewModel.self) private var tripPlanViewModel
+    @Environment(NavigationModel.self) private var navigationModel
     @Environment(\.modelContext) private var modelContext
     
-    @State private var isFavorite = false
-    // Loaded/created TripPlan row for this context
-    @State private var tripPlan: TripPlan?
-    
+    @State private var isSaving = false
+        
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading) {
@@ -54,85 +54,146 @@ struct ItineraryView: View {
         .itineraryStyle()
         .navigationTitle("Itinerary")
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isFavorite.toggle()
-//                    upsertFavorite(isFavorite)
-                } label: {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(isFavorite ? .red : .secondary)
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save") {
+                    Task { await upsertTripPlanAndPopWithUI() }
                 }
+                .disabled(!canSave || isSaving)
+            }
+        }
+        .overlay {
+            if isSaving {
+                ZStack {
+                    Color.black.opacity(0.1).ignoresSafeArea()
+                    ProgressView("Saving…")
+                        .padding(16)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+                }
+                .transition(.opacity)
             }
         }
     }
 }
 
-//extension ItineraryView {
-//    // MARK: - Persistence
-//    
-//    private func loadOrCreateTripPlanIfNeeded() async {
-//        guard let ctx = tripPlanViewModel.tripContext else { return }
-//        
-//        let key = TripPlan.makeKey(for: ctx)
-//        // Fetch existing
-//        var fetched: TripPlan?
-//        do {
-//            let descriptor = FetchDescriptor<TripPlan>(
-//                predicate: #Predicate { $0.id == key },
-//                sortBy: [SortDescriptor(\.createdAt)]
-//            )
-//            fetched = try modelContext.fetch(descriptor).first
-//        } catch {
-//            // ignore for now
-//        }
-//        
-//        if let existing = fetched {
-//            tripPlan = existing
-//            isFavorite = existing.isFavorite
-//            // Always refresh itinerary snapshot
-//            existing.itinerary = ItineraryDTO(itinerary)
-//            try? modelContext.save()
-//        } else {
-//            // Create new
-//            let newRow = TripPlan(
-//                key: key,
-//                origin: ctx.origin,
-//                destinationID: ctx.destination.id,
-//                destinationName: ctx.destination.name,
-//                departureDate: Self.df.date(from: ctx.departureDateISO) ?? Date(),
-//                returnDate: Self.df.date(from: ctx.returnDateISO) ?? Date(),
-//                flightBudgetUSD: ctx.flightBudgetUSD,
-//                hotelBudgetUSD: ctx.hotelBudgetUSD
-//            )
-//            newRow.selectedFlight = ctx.selectedFlight
-//            newRow.selectedHotel  = ctx.selectedHotel
-//            newRow.itinerary      = ItineraryDTO(itinerary)
-//            modelContext.insert(newRow)
-//            try? modelContext.save()
-//            tripPlan = newRow
-//            isFavorite = newRow.isFavorite
-//        }
-//    }
-//    
-//    private func upsertFavorite(_ fav: Bool) {
-//        guard let row = tripPlan else { return }
-//        row.isFavorite = fav
-//        // keep latest itinerary snapshot
-//        row.itinerary = ItineraryDTO(itinerary)
-//        try? modelContext.save()
-//    }
-//    
-//    // A small local ISO parser for dates
-//    private static let df: DateFormatter = {
-//        let f = DateFormatter()
-//        f.calendar = Calendar(identifier: .gregorian)
-//        f.locale = .init(identifier: "en_US_POSIX")
-//        f.timeZone = .init(secondsFromGMT: 0)
-//        f.dateFormat = "yyyy-MM-dd"
-//        return f
-//    }()
-//}
+extension ItineraryView {
+    // Turn PartiallyGenerated into a fully concrete Itinerary, or fail if anything is missing.
+    private func concreteItinerary(from p: Itinerary.PartiallyGenerated) -> Itinerary? {
+        guard
+            let title = p.title,
+            let destinationName = p.destinationName,
+            let description = p.description,
+            let rationale = p.rationale,
+            let dayParts = p.days, dayParts.count == tripPlanViewModel.tripContext!.dayCount
+        else { return nil }
+        
+        var days: [DayPlan] = []
+        days.reserveCapacity(dayParts.count)
+        
+        for d in dayParts {
+            guard
+                let dayTitle = d.title,
+                let subtitle  = d.subtitle,
+                let dest      = d.destination,
+                let acts      = d.activities, acts.count == 4
+            else { return nil }
+            
+            var activities: [Activity] = []
+            activities.reserveCapacity(acts.count)
+            
+            for a in acts {
+                guard
+                    let type = a.type,
+                    let atitle = a.title,
+                    let adesc  = a.description
+                else { return nil }
+                activities.append(Activity(type: type, title: atitle, description: adesc))
+            }
+            
+            days.append(DayPlan(title: dayTitle, subtitle: subtitle, destination: dest, activities: activities))
+        }
+        
+        return Itinerary(title: title,
+                         destinationName: destinationName,
+                         description: description,
+                         rationale: rationale,
+                         days: days)
+    }
+    
+    private var concreteItineraryReady: Itinerary? {
+        concreteItinerary(from: itinerary)
+    }
+    
+    private var canSave: Bool {
+        concreteItineraryReady != nil &&
+        tripPlanViewModel.selectedFlight != nil &&
+        tripPlanViewModel.selectedHotel  != nil
+    }
+    
+    private func parseISO(_ iso: String) -> Date? {
+        let f = DateFormatter()
+        f.calendar = .current
+        f.dateFormat = "yyyy-MM-dd"
+        return f.date(from: iso)
+    }
+    
+    @MainActor
+    private func upsertTripPlanAndPop() {
+        guard let ctx = tripPlanViewModel.tripContext,
+              let solidItinerary = concreteItineraryReady else { return }
+        
+        // Parse dates from your ISO strings (same as before)...
+        guard let depDate = parseISO(ctx.departureDateISO),
+              let retDate = parseISO(ctx.returnDateISO) else { return }
+        
+        // Capture plain values for the predicate
+        let destID  = ctx.destination.id
+        // ✅ Build predicate comparing model fields to captured values
+        let predicate = #Predicate<TripPlan> { plan in
+            plan.destinationID == destID &&
+            plan.departureDate == depDate &&
+            plan.returnDate == retDate
+        }
+        
+        // If your SwiftData context name clashes, qualify it:
+        // @Environment(\.modelContext) private var modelContext: SwiftData.ModelContext
+        var fetch = FetchDescriptor(predicate: predicate)
+        fetch.fetchLimit = 1
+//        let fetch = FetchDescriptor<TripPlan>(predicate: predicate, fetchLimit: 1)
+        let existing = try? modelContext.fetch(fetch).first
+        
+        let row: TripPlan = existing ?? {
+            let r = TripPlan(
+                origin: ctx.origin,
+                destinationID: ctx.destination.id,
+                destinationName: ctx.destination.name,
+                departureDate: depDate,
+                returnDate: retDate,
+                flightBudgetUSD: ctx.flightBudgetUSD,
+                hotelBudgetUSD: ctx.hotelBudgetUSD
+            )
+            modelContext.insert(r)
+            return r
+        }()
+        
+        row.isFavorite     = true
+        row.selectedFlight = tripPlanViewModel.selectedFlight!  // non-nil by canFavorite
+        row.selectedHotel  = tripPlanViewModel.selectedHotel!   // non-nil by canFavorite
+        row.itinerary      = solidItinerary                     // fully concrete (no optionals inside)
+        
+        try? modelContext.save()
+        
+        // Pop the Trip tab to root (as you already do elsewhere)
+        withAnimation { NavigationModel.shared.tripPlanPath.removeAll() }
+    }
+    
+    func upsertTripPlanAndPopWithUI() async {
+        guard !isSaving else { return }
+        isSaving = true
+        
+        upsertTripPlanAndPop()
+        isSaving = false
+    }
+}
 
 private struct DayView: View {
     let destination: Destination

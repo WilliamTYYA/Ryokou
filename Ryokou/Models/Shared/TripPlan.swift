@@ -32,7 +32,6 @@ final class TripPlan {
     @Attribute(.externalStorage) var itineraryData: Data?
     
     init(
-        key: String,
          origin: String,
          destinationID: String,
          destinationName: String,
@@ -40,8 +39,7 @@ final class TripPlan {
          returnDate: Date,
          flightBudgetUSD: Double,
          hotelBudgetUSD: Double
-    )
-    {
+    ) {
         self.origin = origin
         self.destinationID = destinationID
         self.destinationName = destinationName

@@ -10,9 +10,12 @@ import SwiftData
 
 @main
 struct RyokouApp: App {
+    let modelContainer = DataModel.shared.modelContainer
+    
     var body: some Scene {
         WindowGroup {
             RyokouMainView()
+                .modelContainer(modelContainer)
         }
     }
 }

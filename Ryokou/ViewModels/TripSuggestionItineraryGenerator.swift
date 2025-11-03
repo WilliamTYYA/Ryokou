@@ -66,6 +66,8 @@ final class TripSuggestionItineraryGenerator {
                 return
             }
             
+            Log.i("generateItinerary", "Total day: \(context.dayCount)")
+            
             let prompt = Prompt {
                 "Generate a \(context.dayCount)-day itinerary in \(context.destination.name) using this chosen flight: \(selectedFlight.flightNumber!) and hotel: \(selectedHotel.name)."
                 "Give the itinerary a fun title, include a rationale, and fill out the `days` array with appropriate activities."
