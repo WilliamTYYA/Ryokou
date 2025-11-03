@@ -61,17 +61,6 @@ struct ItineraryView: View {
                 .disabled(!canSave || isSaving)
             }
         }
-        .overlay {
-            if isSaving {
-                ZStack {
-                    Color.black.opacity(0.1).ignoresSafeArea()
-                    ProgressView("Saving…")
-                        .padding(16)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-                }
-                .transition(.opacity)
-            }
-        }
     }
 }
 
