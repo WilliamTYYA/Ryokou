@@ -10,6 +10,11 @@ struct ItineraryView: View {
     }
     
     @Environment(TripPlanViewModel.self) private var tripPlanViewModel
+    @Environment(\.modelContext) private var modelContext
+    
+    @State private var isFavorite = false
+    // Loaded/created TripPlan row for this context
+    @State private var tripPlan: TripPlan?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -47,8 +52,87 @@ struct ItineraryView: View {
         }
         .animation(.easeOut, value: itinerary)
         .itineraryStyle()
+        .navigationTitle("Itinerary")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isFavorite.toggle()
+//                    upsertFavorite(isFavorite)
+                } label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(isFavorite ? .red : .secondary)
+                }
+            }
+        }
     }
 }
+
+//extension ItineraryView {
+//    // MARK: - Persistence
+//    
+//    private func loadOrCreateTripPlanIfNeeded() async {
+//        guard let ctx = tripPlanViewModel.tripContext else { return }
+//        
+//        let key = TripPlan.makeKey(for: ctx)
+//        // Fetch existing
+//        var fetched: TripPlan?
+//        do {
+//            let descriptor = FetchDescriptor<TripPlan>(
+//                predicate: #Predicate { $0.id == key },
+//                sortBy: [SortDescriptor(\.createdAt)]
+//            )
+//            fetched = try modelContext.fetch(descriptor).first
+//        } catch {
+//            // ignore for now
+//        }
+//        
+//        if let existing = fetched {
+//            tripPlan = existing
+//            isFavorite = existing.isFavorite
+//            // Always refresh itinerary snapshot
+//            existing.itinerary = ItineraryDTO(itinerary)
+//            try? modelContext.save()
+//        } else {
+//            // Create new
+//            let newRow = TripPlan(
+//                key: key,
+//                origin: ctx.origin,
+//                destinationID: ctx.destination.id,
+//                destinationName: ctx.destination.name,
+//                departureDate: Self.df.date(from: ctx.departureDateISO) ?? Date(),
+//                returnDate: Self.df.date(from: ctx.returnDateISO) ?? Date(),
+//                flightBudgetUSD: ctx.flightBudgetUSD,
+//                hotelBudgetUSD: ctx.hotelBudgetUSD
+//            )
+//            newRow.selectedFlight = ctx.selectedFlight
+//            newRow.selectedHotel  = ctx.selectedHotel
+//            newRow.itinerary      = ItineraryDTO(itinerary)
+//            modelContext.insert(newRow)
+//            try? modelContext.save()
+//            tripPlan = newRow
+//            isFavorite = newRow.isFavorite
+//        }
+//    }
+//    
+//    private func upsertFavorite(_ fav: Bool) {
+//        guard let row = tripPlan else { return }
+//        row.isFavorite = fav
+//        // keep latest itinerary snapshot
+//        row.itinerary = ItineraryDTO(itinerary)
+//        try? modelContext.save()
+//    }
+//    
+//    // A small local ISO parser for dates
+//    private static let df: DateFormatter = {
+//        let f = DateFormatter()
+//        f.calendar = Calendar(identifier: .gregorian)
+//        f.locale = .init(identifier: "en_US_POSIX")
+//        f.timeZone = .init(secondsFromGMT: 0)
+//        f.dateFormat = "yyyy-MM-dd"
+//        return f
+//    }()
+//}
 
 private struct DayView: View {
     let destination: Destination

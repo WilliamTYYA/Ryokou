@@ -9,7 +9,7 @@ import Foundation
 import FoundationModels
 
 @Generable
-struct Itinerary: Equatable {
+struct Itinerary: Equatable, Codable {
     @Guide(description: "An exciting name for the trip.")
     let title: String
     
@@ -27,7 +27,7 @@ struct Itinerary: Equatable {
 }
 
 @Generable
-struct DayPlan: Equatable {
+struct DayPlan: Equatable, Codable {
     @Guide(description: "A unique and exciting title for this day plan.")
     let title: String
     let subtitle: String
@@ -38,14 +38,14 @@ struct DayPlan: Equatable {
 }
 
 @Generable
-struct Activity: Equatable {
+struct Activity: Equatable, Codable {
     let type: Kind
     let title: String
     let description: String
 }
 
 @Generable
-enum Kind {
+enum Kind: String, Codable {
     case sightseeing
     case foodAndDining
     case shopping
