@@ -21,7 +21,3 @@ struct SavedDestinationView: View {
         }
     }
 }
-
-#Preview {
-    SavedDestinationView()
-}

@@ -24,50 +24,31 @@ struct SavedDestinationListView: View {
     
     var body: some View {
         @Bindable var navigationModel = navigationModel
-        
-//        NavigationStack(path: $navigationModel.tripPlanPath) {
-            ScrollView {
-                if tripPlans.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "magnifyingglass")
-                            .font(.largeTitle)
-                            .foregroundStyle(.secondary)
-                        Text("No Saved Trip Plans")
-                            .font(.headline)
-                    }
-                    .frame(maxWidth: .infinity, minHeight: 240)
-                } else {
-                    LazyVStack(alignment: .center, spacing: 20) {
-                        ForEach(tripPlans) { tripPlan in
-//                            NavigationLink(value: TripPlanRoute.destination(destination)) {
-                                SavedDestinationListCardView(tripPlan: tripPlan)
-                                    .frame(height: 200)
-//                            }
-//                            .buttonStyle(.plain)
-                        }
-                    }
-                    .padding(.horizontal)
+        ScrollView {
+            if tripPlans.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.largeTitle)
+                        .foregroundStyle(.secondary)
+                    Text("No Saved Trip Plans")
+                        .font(.headline)
                 }
+                .frame(maxWidth: .infinity, minHeight: 240)
+            } else {
+                LazyVStack(alignment: .center, spacing: 20) {
+                    ForEach(tripPlans) { tripPlan in
+                        NavigationLink {
+                            SavedItineraryView(tripPlan: tripPlan)
+                        } label: {
+                            SavedDestinationListCardView(tripPlan: tripPlan)
+                                .frame(height: 200)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal)
             }
-            
-//            .navigationDestination(for: TripPlanRoute.self) { route in
-//                switch route {
-//                case .destination(let destination):
-//                    DestinationDetailView(destination: destination)
-//                    
-//                case .suggestions:
-//                    TripGenerationScreen(mode: .suggestions({ suggestion in
-//                        FlightAndAccomodationSuggestionView(suggestion: suggestion)
-//                    }))
-//                    
-//                case .itinerary:
-//                    TripGenerationScreen(mode: .itinerary({ itinerary in
-//                        ItineraryView(itinerary: itinerary)
-//                    }))
-//                }
-//            }
-//        }
-       
+        }
     }
 }
 
