@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct SavedDestinationView: View {
+    @Environment(NavigationModel.self) private var navigationModel
     @State private var searchText = ""
     
     var body: some View {
-        NavigationStack {
+        @Bindable var navigationModel = navigationModel
+        
+        NavigationStack(path: $navigationModel.savedPath) {
             SavedDestinationListView()
                 .navigationTitle("")
                 .navigationBarTitleDisplayMode(.inline)

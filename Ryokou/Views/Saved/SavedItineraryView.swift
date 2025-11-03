@@ -10,8 +10,8 @@ struct SavedItineraryView: View {
         self.tripPlan = tripPlan
     }
     
+    @Environment(NavigationModel.self) private var navigationModel
     @Environment(\.modelContext) private var modelContext
-    @State private var isSaving = false
     
     private var destination: Destination {
         ModelData.destinations.first(where: { $0.name == tripPlan.destinationName })!
@@ -112,9 +112,9 @@ struct SavedItineraryView: View {
             .toolbar {
                 ToolbarItem(placement: .destructiveAction) {
                     Button("Delete") {
-//                        Task { await upsertTripPlanAndPopWithUI() }
+                        modelContext.delete(tripPlan)
+                        withAnimation { navigationModel.savedPath.removeAll() }
                     }
-//                    .disabled(!canSave || isSaving)
                 }
             }
         }
@@ -168,8 +168,6 @@ private struct SavedDayView: View {
         .card()
         .animation(.easeInOut, value: plan)
     }
-    
-    
 }
 
 private struct SavedActivityList: View {

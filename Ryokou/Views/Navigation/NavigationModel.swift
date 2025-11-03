@@ -11,6 +11,7 @@ import SwiftUI
 @Observable
 final class NavigationModel {
     public var tripPlanPath: [TripPlanRoute] = []
+    public var savedPath: [TripPlan] = []
     
     private init() { }
     

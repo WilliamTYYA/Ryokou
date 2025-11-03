@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct SavedDestinationListView: View {
-    @Environment(NavigationModel.self) private var navigationModel
     @Query(sort: \TripPlan.departureDate, order: .reverse)
     private var tripPlans: [TripPlan]
     
@@ -23,7 +22,6 @@ struct SavedDestinationListView: View {
     }
     
     var body: some View {
-        @Bindable var navigationModel = navigationModel
         ScrollView {
             if tripPlans.isEmpty {
                 VStack(spacing: 12) {
@@ -37,9 +35,7 @@ struct SavedDestinationListView: View {
             } else {
                 LazyVStack(alignment: .center, spacing: 20) {
                     ForEach(tripPlans) { tripPlan in
-                        NavigationLink {
-                            SavedItineraryView(tripPlan: tripPlan)
-                        } label: {
+                        NavigationLink(value: tripPlan) {
                             SavedDestinationListCardView(tripPlan: tripPlan)
                                 .frame(height: 200)
                         }
@@ -48,6 +44,11 @@ struct SavedDestinationListView: View {
                 }
                 .padding(.horizontal)
             }
+        }
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: TripPlan.self) { tripPlan in
+            SavedItineraryView(tripPlan: tripPlan)
         }
     }
 }
