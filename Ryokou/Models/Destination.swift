@@ -62,6 +62,24 @@ enum ModelData {
             latitude: 35.6762,
             longitude: 139.6503,
             span: 0.22
+        ),
+        Destination(
+            id: "Singapore",
+            name: "Singapore",
+            continent: "Asia",
+            description: "Garden City — Marina Bay skyline, hawker food, and lush urban parks.",
+            latitude: 1.3521,
+            longitude: 103.8198,
+            span: 0.18
+        ),
+        Destination(
+            id: "Dubai",
+            name: "Dubai",
+            continent: "Asia",
+            description: "Futurist desert hub — Burj Khalifa, luxury malls, souks, and dunes.",
+            latitude: 25.2048,
+            longitude: 55.2708,
+            span: 0.25
         )
     ]
     
