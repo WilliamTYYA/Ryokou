@@ -51,7 +51,7 @@ struct TripGenerationScreen<Content: View>: View {
     }
     
     private func runGenerationIfNeeded(generator: TripSuggestionItineraryGenerator,
-                                       context: ModelContext,
+                                       context: InputContextForItineraryGenerator,
                                        mode: Mode) async {
         switch mode {
         case .suggestions:

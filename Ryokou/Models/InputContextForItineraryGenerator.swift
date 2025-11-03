@@ -1,5 +1,5 @@
 //
-//  TripContext.swift
+//  InputContextForItineraryGenerator.swift
 //  Ryokou
 //
 //  Created by Thiha Ye Yint Aung on 10/24/25.
@@ -8,7 +8,7 @@
 import Foundation
 //import Calendar
 
-struct ModelContext: Equatable, Hashable {
+struct InputContextForItineraryGenerator: Equatable, Hashable {
     let origin: String
     let destination: Destination
     let flightBudgetUSD: Double
@@ -19,7 +19,7 @@ struct ModelContext: Equatable, Hashable {
     var selectedHotel: HotelResult? = nil
 }
 
-extension ModelContext {
+extension InputContextForItineraryGenerator {
     static let df: DateFormatter = {
         let f = DateFormatter()
         f.calendar = .current
@@ -27,8 +27,8 @@ extension ModelContext {
         return f
     }()
     
-    static func from(profile: Profile, destination: Destination, departureDate: Date, returnDate: Date) -> ModelContext {
-        ModelContext(
+    static func from(profile: Profile, destination: Destination, departureDate: Date, returnDate: Date) -> InputContextForItineraryGenerator {
+        InputContextForItineraryGenerator(
             origin: profile.location.city,
             destination: destination,
             flightBudgetUSD: profile.flightBudgetUSD,

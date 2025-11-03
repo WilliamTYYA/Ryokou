@@ -21,7 +21,7 @@ class TripPlanViewModel {
         selectedFlight != nil && selectedHotel != nil
     }
     
-    var tripContext: ModelContext? = nil
+    var tripContext: InputContextForItineraryGenerator? = nil
     
     var selectedFlight: FlightResult? { tripContext?.selectedFlight }
     var selectedHotel: HotelResult? { tripContext?.selectedHotel }

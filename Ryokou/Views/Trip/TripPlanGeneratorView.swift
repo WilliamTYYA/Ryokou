@@ -34,7 +34,7 @@ struct TripPlanGeneratorView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .safeAreaInset(edge: .bottom) {
             GenerateButton(label: "Options") {
-                let ctx = ModelContext.from(profile: profile,
+                let ctx = InputContextForItineraryGenerator.from(profile: profile,
                                            destination: destination,
                                            departureDate: departure,
                                            returnDate: returning)

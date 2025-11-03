@@ -8,7 +8,7 @@ final class TripSuggestionItineraryGenerator {
     private(set) var suggestion: FlightAndHotelSuggestion.PartiallyGenerated?
     private(set) var itinerary: Itinerary.PartiallyGenerated?
     
-    var tripContext: ModelContext?
+    var tripContext: InputContextForItineraryGenerator?
     var error: Error?
     
     init() {
@@ -34,7 +34,7 @@ final class TripSuggestionItineraryGenerator {
         )
     }
     
-    func generateFlightAndHotelSuggestion(context: ModelContext) async {
+    func generateFlightAndHotelSuggestion(context: InputContextForItineraryGenerator) async {
         do {
             self.tripContext = context
             
@@ -58,7 +58,7 @@ final class TripSuggestionItineraryGenerator {
         }
     }
     
-    func generateItinerary(context: ModelContext) async {
+    func generateItinerary(context: InputContextForItineraryGenerator) async {
         do {
             self.tripContext = context
             
