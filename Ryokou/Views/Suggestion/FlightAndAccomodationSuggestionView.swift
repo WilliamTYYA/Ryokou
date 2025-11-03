@@ -99,8 +99,9 @@ struct FlightAndAccomodationSuggestionView: View {
                                         
                                         Text(String(format: "$%.0f–$%.0f", min, max))
                                             .contentTransition(.opacity)
-                                            .font(.subheadline)
-                                            .foregroundStyle(.secondary)
+                                            .fontWeight(.semibold)
+//                                            .font(.subheadline)
+//                                            .foregroundStyle(.secondary)
                                             .layoutPriority(1)
                                     }
                                     .lineLimit(1)

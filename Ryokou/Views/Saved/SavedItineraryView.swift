@@ -34,6 +34,60 @@ struct SavedItineraryView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                
+                // MARK: - Flight
+                if let flight = tripPlan.selectedFlight {
+                    HStack(spacing: 8) {
+                        Image(systemName: "airplane.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.yellow)
+                            .frame(width: 36, height: 36)
+                            .background(Circle().fill(Color.yellow.opacity(0.2)))
+                        
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("\(flight.airline!) \(flight.flightNumber!)")
+                                .contentTransition(.opacity)
+                                .font(.headline)
+                            
+                            Text("\(flight.departureTime) → \(flight.arrivalTime)")
+                                .contentTransition(.opacity)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        
+                        Spacer()
+                        
+                        Text(String(format: "$%.0f", flight.price))
+                            .contentTransition(.opacity)
+                            .fontWeight(.semibold)
+                    }
+                }
+                
+                // MARK: - Hotel
+                if let hotel = tripPlan.selectedHotel {
+                    HStack(spacing: 8) {
+                        Image(systemName: "bed.double.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.yellow)
+                            .frame(width: 36, height: 36)
+                            .background(Circle().fill(Color.yellow.opacity(0.2)))
+                        
+                        Text(hotel.name)
+                            .contentTransition(.opacity)
+                            .font(.headline)
+                        
+                        Spacer()
+                        
+                        Text(String(format: "$%.0f–$%.0f", hotel.minimumPrice!, hotel.maximumPrice!))
+                            .contentTransition(.opacity)
+                            .fontWeight(.semibold)
+//                            .font(.subheadline)
+//                            .foregroundStyle(.secondary)
+                            .layoutPriority(1)
+                    }
+                    .lineLimit(1)
+                }
+                
                 HStack(alignment: .top) {
                     Image(systemName: "sparkles")
                     if let rationale = tripPlan.itinerary?.rationale {
