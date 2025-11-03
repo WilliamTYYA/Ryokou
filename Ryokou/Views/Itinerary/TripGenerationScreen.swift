@@ -28,7 +28,7 @@ struct TripGenerationScreen<Content: View>: View {
                     render(suggestion)
                         .padding()
                 } else {
-                    ProgressView("Finding options…")
+                    ProgressView("Finding Options…")
                         .padding(.top, 120)
                         .padding(.top)
                 }
@@ -38,7 +38,7 @@ struct TripGenerationScreen<Content: View>: View {
                     render(itinerary)
                         .padding()
                 } else {
-                    ProgressView("Building itinerary…")
+                    ProgressView("Building Itinerary…")
                         .padding(.top, 120)
                         .padding(.top)
                 }

@@ -19,7 +19,7 @@ struct FlightAndAccommodationSuggestionScreen: View {
                 FlightAndAccomodationSuggestionView(suggestion: suggestion)
                     .padding()
             } else {
-                ProgressView()
+                ProgressView("Finding Options...")
                     .padding(.top, 120)
                     .padding(.top)
             }
