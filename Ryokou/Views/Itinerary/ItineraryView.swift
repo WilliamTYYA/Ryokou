@@ -118,21 +118,14 @@ extension ItineraryView {
         tripPlanViewModel.selectedHotel  != nil
     }
     
-    private func parseISO(_ iso: String) -> Date? {
-        let f = DateFormatter()
-        f.calendar = .current
-        f.dateFormat = "yyyy-MM-dd"
-        return f.date(from: iso)
-    }
-    
     @MainActor
     private func upsertTripPlanAndPop() {
         guard let ctx = tripPlanViewModel.tripContext,
               let solidItinerary = concreteItineraryReady else { return }
         
         // Parse dates from your ISO strings (same as before)...
-        guard let depDate = parseISO(ctx.departureDateISO),
-              let retDate = parseISO(ctx.returnDateISO) else { return }
+        guard let depDate = DateFormatter.parseISO(ctx.departureDateISO),
+              let retDate = DateFormatter.parseISO(ctx.returnDateISO) else { return }
         
         // Capture plain values for the predicate
         let destID  = ctx.destination.id

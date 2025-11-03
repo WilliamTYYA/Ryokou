@@ -36,3 +36,16 @@ struct ReadabilityRoundedRectangle: View {
             )
     }
 }
+
+extension DateFormatter {
+    static let shared: DateFormatter = {
+        let f = DateFormatter()
+        f.calendar = .current
+        f.dateFormat = "yyyy-MM-dd"
+        return f
+    }()
+    
+    static func parseISO(_ iso: String) -> Date? {
+        return shared.date(from: iso)
+    }
+}

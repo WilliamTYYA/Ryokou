@@ -16,7 +16,7 @@ struct RyokouTabView: View {
                     Label("Map", systemImage: "map")
                 }
             
-            Text("Saved Trips")
+            SavedDestinationView()
                 .tabItem {
                     Label("Saved", systemImage: "bookmark")
                 }

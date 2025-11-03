@@ -20,29 +20,22 @@ struct InputContextForItineraryGenerator: Equatable, Hashable {
 }
 
 extension InputContextForItineraryGenerator {
-    static let df: DateFormatter = {
-        let f = DateFormatter()
-        f.calendar = .current
-        f.dateFormat = "yyyy-MM-dd"
-        return f
-    }()
-    
     static func from(profile: Profile, destination: Destination, departureDate: Date, returnDate: Date) -> InputContextForItineraryGenerator {
         InputContextForItineraryGenerator(
             origin: profile.location.city,
             destination: destination,
             flightBudgetUSD: profile.flightBudgetUSD,
             hotelBudgetUSD: profile.hotelBudgetUSD,
-            departureDateISO: df.string(from: departureDate),
-            returnDateISO: df.string(from: returnDate)
+            departureDateISO: DateFormatter.shared.string(from: departureDate),
+            returnDateISO: DateFormatter.shared.string(from: returnDate)
         )
     }
     
     /// Number of **nights** between departure and return (e.g. 2025-12-01 → 2025-12-04 = 3)
     var dayCount: Int {
         guard
-            let start = Self.df.date(from: departureDateISO),
-            let end   = Self.df.date(from: returnDateISO)
+            let start = DateFormatter.shared.date(from: departureDateISO),
+            let end   = DateFormatter.shared.date(from: returnDateISO)
         else { return 0 }
         
         let cal = Calendar(identifier: .gregorian)
