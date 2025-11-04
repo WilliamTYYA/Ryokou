@@ -9,14 +9,14 @@ Profile Title  - Ryokou
 - SCI            - Apple FoundationModel defines “do less, accomplish more”—minimal user effort, maximal organized results.
 - Author         - Thiha Ye Yint Aung
 
--What it does
--• Finds budget-aware flights & hotels
--• Generates day-by-day itineraries on device (privacy by default)
--• Built with SwiftUI + Foundation Models + SwiftData
+- What it does
+- • Finds budget-aware flights & hotels
+- • Generates day-by-day itineraries on device (privacy by default)
+- • Built with SwiftUI + Foundation Models + SwiftData
 
--Try it
--GitHub: https://github.com/WilliamTYYA/Ryokou
--Install/Test: https://appdistribution.firebase.dev/i/141132af8331294f
+- Try it
+- GitHub: https://github.com/WilliamTYYA/Ryokou
+- Install/Test: https://appdistribution.firebase.dev/i/141132af8331294f
 
 
 <img width="1728" height="1117" alt="Screenshot 2025-11-03 at 4 45 33 PM" src="https://github.com/user-attachments/assets/476d336f-7967-40da-8292-6071b0cebfcb" />
