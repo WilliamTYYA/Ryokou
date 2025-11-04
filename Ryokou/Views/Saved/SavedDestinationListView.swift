@@ -14,7 +14,7 @@ struct SavedDestinationListView: View {
     
     @State private var searchText = ""
     
-    init(searchText: String = "") {
+    init(searchText: String) {
         let searchPredicate = #Predicate<TripPlan> {
             searchText.isEmpty ? true : $0.destinationName.localizedStandardContains(searchText)
         }

@@ -15,7 +15,7 @@ struct SavedDestinationView: View {
         @Bindable var navigationModel = navigationModel
         
         NavigationStack(path: $navigationModel.savedPath) {
-            SavedDestinationListView()
+            SavedDestinationListView(searchText: searchText)
                 .navigationTitle("")
                 .navigationBarTitleDisplayMode(.inline)
                 .searchable(text: $searchText, prompt: "Search Cities")
