@@ -13,6 +13,8 @@ struct ProfileView: View {
     @State private var activitiesBudgetInput = ""
     @State private var showError = false
     
+    @Environment(\.openURL) private var openURL
+    
     var body: some View {
         NavigationView {
             Form {
@@ -40,8 +42,6 @@ struct ProfileView: View {
                             .opacity(!isEditing ? 1 : 0)
                     }
                 }
-//                .disabled(!isEditing)
-//                .opacity(isEditing ? 1 : 0.75)
                 
                 Section {
                     FloatingLabelTextField(
@@ -70,8 +70,24 @@ struct ProfileView: View {
                             .opacity(!isEditing ? 1 : 0)
                     }
                 }
-//                .disabled(!isEditing)
-//                .opacity(isEditing ? 1 : 0.75)
+                
+                Section {
+                    Button(action: openLinkedIn) {
+                        Text({ () -> AttributedString in
+                            var s = AttributedString("Hi, I'm ")
+                            var name = AttributedString("Thiha Ye Yint Aung")
+                            name.foregroundColor = .blue
+                            name.inlinePresentationIntent = .stronglyEmphasized
+                            s.append(name)
+                            s.append(AttributedString("\nTap to connect on LinkedIn"))
+                            return s
+                        }())
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.tint) // link-like color
+                }
             }
             .navigationTitle("Setup Profile")
             .toolbar {
@@ -96,13 +112,6 @@ struct ProfileView: View {
                     .animation(.none, value: isEditing)
                 }
             }
-//            .alert(isPresented: $showError) {
-//                Alert(
-//                    title: Text("Invalid Input"),
-//                    message: Text("Please ensure all budget fields contain valid numbers."),
-//                    dismissButton: .default(Text("OK"))
-//                )
-//            }
             .alert("Invalid Input",
                    isPresented: $showError,
                    actions: { Button("OK", role: .cancel) { reloadFromProfile() } },
@@ -162,5 +171,20 @@ private struct ReadOnlyChip: View {
             .font(.caption2)
             .padding(.horizontal, 8).padding(.vertical, 4)
             .background(.ultraThinMaterial, in: Capsule())
+    }
+}
+
+extension ProfileView {
+    private func openLinkedIn() {
+        let appURL = URL(string: "linkedin://in/thiha-ye-yint-aung")!
+        let webURL = URL(string: "https://www.linkedin.com/in/thiha-ye-yint-aung")!
+        
+        if UIApplication.shared.canOpenURL(appURL) {
+            UIApplication.shared.open(appURL, options: [:]) { success in
+                if !success { openURL(webURL) }
+            }
+        } else {
+            openURL(webURL)
+        }
     }
 }
