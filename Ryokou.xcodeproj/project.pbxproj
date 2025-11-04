@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9ED0B31B2EB9AB1000CB0781 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 9ED0B31A2EB9AB1000CB0781 /* FirebaseAnalytics */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		9E55741B2EAAA44B00B1702D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9ED0B31B2EB9AB1000CB0781 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = Ryokou;
 			packageProductDependencies = (
+				9ED0B31A2EB9AB1000CB0781 /* FirebaseAnalytics */,
 			);
 			productName = Ryokou;
 			productReference = 9E55740B2EAAA44A00B1702D /* Ryokou.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 9E5574022EAAA44A00B1702D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9ED0B3192EB9AB1000CB0781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 9E55740C2EAAA44A00B1702D /* Products */;
 			projectDirPath = "";
@@ -619,6 +628,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9ED0B3192EB9AB1000CB0781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		9ED0B31A2EB9AB1000CB0781 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9ED0B3192EB9AB1000CB0781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9E5574032EAAA44A00B1702D /* Project object */;
 }
