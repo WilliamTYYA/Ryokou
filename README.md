@@ -1,15 +1,25 @@
 Profile Title  - Ryokou
 ---
 - Description    - Apple on-device AI powered Trip Itinerary planning app
-- Feature        - FoundationModel, AppStorage(DataStore), SwiftUI(Jetpack Compose) - TabView, Navigation, Animation, Transistion and Custom UI, URLSession(RetroFit), Swift Concurrency(WorkManager) - Task, Actor, SwiftData
+- Feature        - FoundationModel, AppStorage, SwiftData, SwiftUI - TabView, Navigation, Animation, Transistion and Custom UI, URLSession, Swift Concurrency - Task, Actor
 - Architecture   - MVVM
 - Setup          - Xcode26 and macOS 26
 - API reference  - https://data.xotelo.com/api/ and https://api.flightapi.io/roundtrip/
-- Generative AI  - Apple on-device lanaguage model and external data source to generate trip itineraries
+- Generative AI  - Apple on-device lanaguage model (FoundationModels) and Tools for external data source to generate trip itineraries
 - SCI            - Apple FoundationModel defines “do less, accomplish more”—minimal user effort, maximal organized results.
-- Author         - Thiha Ye Yint Aung, 618987, Mobile Device Programming and CS473 - OCT 2025.
+- Author         - Thiha Ye Yint Aung
 
-<img width="596" height="1142" alt="Screenshot 2025-10-24 at 3 43 58 PM" src="https://github.com/user-attachments/assets/970c9add-f565-4a38-9c37-da02c13954ef" />
-<img width="596" height="1142" alt="Screenshot 2025-10-24 at 3 43 45 PM" src="https://github.com/user-attachments/assets/1121b818-cc6e-42ec-8df0-b60b77bcb333" />
-<img width="596" height="1142" alt="Screenshot 2025-10-24 at 3 43 36 PM" src="https://github.com/user-attachments/assets/cd50b78c-e7fe-4621-982b-34347d011010" />
-<img width="596" height="1142" alt="Screenshot 2025-10-24 at 3 43 17 PM" src="https://github.com/user-attachments/assets/7ca10038-6a0f-4e86-927b-3941124fbe79" />
+What it does
+• Finds budget-aware flights & hotels
+• Generates day-by-day itineraries on device (privacy by default)
+• Built with SwiftUI + Foundation Models + SwiftData
+
+Try it
+GitHub: https://github.com/WilliamTYYA/Ryokou
+Install/Test: https://appdistribution.firebase.dev/i/141132af8331294f
+
+
+<img width="1728" height="1117" alt="Screenshot 2025-11-03 at 4 45 33 PM" src="https://github.com/user-attachments/assets/476d336f-7967-40da-8292-6071b0cebfcb" />
+<img width="1728" height="1117" alt="Screenshot 2025-11-03 at 4 46 25 PM" src="https://github.com/user-attachments/assets/366f332e-902e-4008-99ab-0414acd95a69" />
+<img width="1728" height="1117" alt="Screenshot 2025-11-03 at 4 47 03 PM" src="https://github.com/user-attachments/assets/d8f1cffc-df5d-49ee-ae39-d5decd3a720c" />
+<img width="1728" height="1117" alt="Screenshot 2025-11-03 at 4 47 32 PM" src="https://github.com/user-attachments/assets/950c4adc-610e-472e-8731-4e6ecd2c82d2" />
